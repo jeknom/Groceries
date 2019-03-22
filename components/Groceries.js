@@ -12,6 +12,9 @@ export default class Groceries extends React.Component {
 
   handleAdd = grocery => {
     const dataCopy = { ...this.props.data };
+    if (dataCopy.groceries.some(g => g.name === grocery.name))
+      return;
+
     dataCopy.groceries.push(grocery);
     this.props.onUpdate(dataCopy);
   }
