@@ -1,28 +1,31 @@
 import * as React from 'react';
 import { Dialog, Portal, Button, TextInput } from 'react-native-paper';
 
-export default class ModifyItem extends React.Component {
+export default class GroceryEdit extends React.Component {
     state = {
         nameText: "",
         priceText: "",
     };
 
     render() {
-        const { visible, type, onModify, onCancel } = this.props;
+        const { visible, onModify, onCancel } = this.props;
+
         return (
             <Portal>
                 <Dialog visible={visible} onDismiss={() => onCancel()}>
-                    <Dialog.Title>ADD A NEW GROCERY</Dialog.Title>
+                    <Dialog.Title>New grocery</Dialog.Title>
                     <Dialog.Content>
                         <TextInput
                             label='Grocery'
                             value={this.state.nameText}
                             onChangeText={text => this.setState({ nameText: text })}
+                            mode='outlined'
                         />
                         <TextInput
                             label='Price'
                             value={this.state.priceText}
                             onChangeText={text => this.setState({ priceText: text })}
+                            mode='outlined'
                         />
                     </Dialog.Content>
                     <Dialog.Actions>

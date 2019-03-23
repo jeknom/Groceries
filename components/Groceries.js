@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, Searchbar } from 'react-native-paper';
+import { Button, Searchbar, Divider } from 'react-native-paper';
 import Grocery from './Grocery';
-import ModifyItem from './ModifyItem';
+import GroceryEdit from './GroceryEdit';
 
 export default class Groceries extends React.Component {
   state = {
@@ -32,7 +32,6 @@ export default class Groceries extends React.Component {
     const groceryItems = () => {
       if (data.groceries) {
         const dataSearch = search === "" ? data.groceries : data.groceries.filter(g => g.name.toUpperCase().includes(search.toUpperCase()));
-        dataSearch.sort((a, b) => (a.color > b.color) ? 1 : -1);
         return dataSearch.map(g =>
           <Grocery
             key={g.name}
@@ -51,16 +50,18 @@ export default class Groceries extends React.Component {
           onChangeText={query => { this.setState({ search: query }); }}
           value={search}
         />
+        <Divider />
         {groceryItems()}
         <Button
           style={styles.addButton}
           icon="add"
           mode="outlined"
           onPress={() => this.setState({ addVisible: true })}
-        />
-        <ModifyItem
+        >
+          Add grocery
+        </Button>
+        <GroceryEdit
           visible={this.state.addVisible}
-          type={'GROCERY'}
           onModify={this.handleAdd}
           onCancel={() => {
             this.setState({ addVisible: false });
@@ -73,7 +74,9 @@ export default class Groceries extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    margin: 20,
+    marginRight: 20,
+    marginLeft: 20,
+    marginTop: 15,
   },
 
   searchbar: {
@@ -81,8 +84,7 @@ const styles = StyleSheet.create({
   },
 
   addButton: {
-    marginRight: 20,
-    marginLeft: 20,
-    padding: 20,
+    margin: 20,
+    padding: 10,
   }
 });

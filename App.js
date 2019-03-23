@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Font } from 'expo';
-import { View, AsyncStorage, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, AsyncStorage, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 import { Provider as PaperProvider, Button } from 'react-native-paper';
 import Groceries from './components/Groceries';
+import Meals from './components/Meals';
+import EraseData from './components/Debug/EraseData';
 
 export default class App extends React.Component {
   state = {
@@ -60,19 +62,17 @@ export default class App extends React.Component {
     if (!this.state.loading)
       return (
         <PaperProvider>
-          <Groceries
-            data={this.state.data}
-            onUpdate={this.updateData}
-          />
-          <Button
-            mode="outlined"
-            onPress={async () => {
-              await AsyncStorage.clear()
-            }}
-            icon="remove"
-          >
-            Debug: destroy data
-        </Button>
+          <ScrollView>
+            <Groceries
+              data={this.state.data}
+              onUpdate={this.updateData}
+            />
+            <Meals
+              data={this.state.data}
+              onUpdate={this.updateData}
+            />
+          </ScrollView>
+          <EraseData />
         </PaperProvider>
       );
     else return (
