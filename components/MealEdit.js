@@ -1,16 +1,28 @@
 import * as React from 'react';
 import { Text } from 'react-native';
 import { StyleSheet } from 'react-native';
-import { Dialog, Portal, Button, TextInput, Chip } from 'react-native-paper';
+import { Dialog, Paragraph, Portal, Button, TextInput, Chip } from 'react-native-paper';
 
 export default class MealEdit extends React.Component {
     state = {
         nameText: "",
         priceText: "",
+        selectedGroceries: [],
     };
 
     render() {
         const { visible, onModify, onCancel, groceries } = this.props;
+
+        const handleAdd = grocery => {
+            const selectedCopy = [...this.state.selectedGroceries];
+
+            if (selectedCopy.some(item => item.name === grocery.name))
+                this.setState({ selectedGroceries: selectedCopy.filter(i => i.name !== grocery.name) })
+            else {
+                selectedCopy.push(grocery);
+                this.setState({ selectedGroceries: selectedCopy });
+            }
+        }
 
         const content = () => {
             if (groceries && groceries.length > 0)
@@ -22,12 +34,21 @@ export default class MealEdit extends React.Component {
                             value={this.state.nameText}
                             onChangeText={text => this.setState({ nameText: text })}
                         />
-                        {groceries.map(g => <Chip key={g.name} style={styles.chip}>{g.name}</Chip>)}
+                        {groceries.map(g =>
+                            <Chip
+                                key={g.name}
+                                style={styles.chip}
+                                selected={this.state.selectedGroceries.some(i => i.name === g.name)}
+                                onPress={() => handleAdd(g)}
+                            >
+                                {g.name}
+                            </Chip>
+                        )}
                     </>
                 );
 
             else
-                return <Text>You need to add some groceries first.</Text>
+                return <Paragraph>You need to add some groceries first.</Paragraph>
         }
 
         return (
@@ -41,7 +62,7 @@ export default class MealEdit extends React.Component {
                         <Button
                             icon="add"
                             mode="outlined"
-                            onPress={() => onModify({ name: this.state.nameText, price: this.state.priceText })}
+                            onPress={() => onModify({ name: this.state.nameText, groceries: this.state.selectedGroceries })}
                         >
                             Add
                         </Button>

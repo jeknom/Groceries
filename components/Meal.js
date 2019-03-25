@@ -6,7 +6,7 @@ const Meal = ({ meal, onDelete }) => {
 
   const groceries = () => {
     if (meal.groceries && meal.groceries.length > 0)
-      return meal.groceries.map(g => <Chip mode='outlined'>{g.name}</Chip>);
+      return meal.groceries.map(g => <Chip key={g.name} mode='outlined'>{g.name}</Chip>);
     else
       return <Text>No groceries have been added to this meal.</Text>;
   }
