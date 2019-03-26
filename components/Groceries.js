@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { Button, Searchbar, Divider } from 'react-native-paper';
 import Grocery from './Grocery';
 import GroceryEdit from './GroceryEdit';
@@ -10,18 +10,22 @@ export default class Groceries extends React.Component {
     addVisible: false,
   }
 
-  handleAdd = grocery => {
+  handleUpdate = grocery => {
     const dataCopy = { ...this.props.data };
-    if (dataCopy.groceries.some(g => g.name === grocery.name))
+    if (dataCopy.groceries.some(g => g.name === grocery.name) ||
+      (grocery.name === "" || grocery.price === ""))
       return;
 
     dataCopy.groceries.push(grocery);
     this.props.onUpdate(dataCopy);
   }
 
-  handleDelete = groceryName => {
+  handleDelete = grocery => {
     const dataCopy = { ...this.props.data };
-    dataCopy.groceries = dataCopy.groceries.filter(g => g.name !== groceryName);
+    dataCopy.groceries = dataCopy.groceries.filter(g => g.name !== grocery.name);
+    dataCopy.meals.forEach(m => {
+      m.groceries = m.groceries.filter(g => g.name !== grocery.name)
+    });
     this.props.onUpdate(dataCopy);
   }
 
@@ -44,29 +48,31 @@ export default class Groceries extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Searchbar
-          style={styles.searchbar}
-          placeholder="Search"
-          onChangeText={query => { this.setState({ search: query }); }}
-          value={search}
-        />
-        <Divider />
-        {groceryItems()}
-        <Button
-          style={styles.addButton}
-          icon="add"
-          mode="outlined"
-          onPress={() => this.setState({ addVisible: true })}
-        >
-          Add grocery
-        </Button>
-        <GroceryEdit
-          visible={this.state.addVisible}
-          onModify={this.handleAdd}
-          onCancel={() => {
-            this.setState({ addVisible: false });
-          }}
-        />
+        <ScrollView>
+          <Searchbar
+            style={styles.searchbar}
+            placeholder="Search"
+            onChangeText={query => { this.setState({ search: query }); }}
+            value={search}
+          />
+          <Divider />
+          {groceryItems()}
+          <Button
+            style={styles.addButton}
+            icon="add"
+            mode="outlined"
+            onPress={() => this.setState({ addVisible: true })}
+          >
+            Add grocery
+          </Button>
+          <GroceryEdit
+            visible={this.state.addVisible}
+            onModify={this.handleUpdate}
+            onCancel={() => {
+              this.setState({ addVisible: false });
+            }}
+          />
+        </ScrollView>
       </View>
     );
   }

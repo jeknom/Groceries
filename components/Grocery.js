@@ -6,13 +6,13 @@ const Grocery = ({ item, onDelete }) => {
     <>
       <List.Item
         title={item.name}
-        description={item.price}
-        left={() =>
+        description={`${item.price}€`}
+        right={() =>
           <IconButton
-            icon="remove"
+            icon="delete"
             color={Colors.red500}
             size={20}
-            onPress={() => onDelete(item.name)}
+            onPress={() => onDelete(item)}
           />
         }
       />

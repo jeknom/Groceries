@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Font } from 'expo';
-import { View, AsyncStorage, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
-import { Provider as PaperProvider, Button } from 'react-native-paper';
+import { View, AsyncStorage, StyleSheet, ActivityIndicator } from 'react-native';
+import { Provider as PaperProvider, BottomNavigation, Text } from 'react-native-paper';
 import Groceries from './components/Groceries';
 import Meals from './components/Meals';
 import EraseData from './components/Debug/EraseData';
@@ -9,6 +9,11 @@ import EraseData from './components/Debug/EraseData';
 export default class App extends React.Component {
   state = {
     loading: true,
+    index: 0,
+    routes: [
+      { key: 'meals', title: 'Meals', icon: 'queue-music' },
+      { key: 'groceries', title: 'Groceries', icon: 'album' },
+    ],
     data: {}
   }
 
@@ -59,20 +64,34 @@ export default class App extends React.Component {
 
   render() {
     console.log(this.state.data)
+
+    const GroceriesRoute = () =>
+      <Groceries
+        data={this.state.data}
+        onUpdate={this.updateData}
+      />;
+
+    const MealsRoute = () =>
+      <Meals
+        data={this.state.data}
+        onUpdate={this.updateData}
+      />;
+
+    const handleIndexChange = index => this.setState({ index });
+
+    const renderScene = BottomNavigation.SceneMap({
+      groceries: GroceriesRoute,
+      meals: MealsRoute,
+    });
+
     if (!this.state.loading)
       return (
         <PaperProvider>
-          <ScrollView>
-            <Groceries
-              data={this.state.data}
-              onUpdate={this.updateData}
-            />
-            <Meals
-              data={this.state.data}
-              onUpdate={this.updateData}
-            />
-          </ScrollView>
-          <EraseData />
+          <BottomNavigation
+            navigationState={this.state}
+            onIndexChange={handleIndexChange}
+            renderScene={renderScene}
+          />
         </PaperProvider>
       );
     else return (
