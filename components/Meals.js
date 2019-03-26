@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Button, Divider } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import Meal from './Meal';
 import MealEdit from './MealEdit';
 
@@ -50,7 +50,6 @@ export default class Meals extends React.Component {
         return (
             <View style={styles.container}>
                 <ScrollView>
-                    <Divider />
                     {meals()}
                 </ScrollView>
                 <Button

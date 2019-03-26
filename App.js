@@ -4,6 +4,7 @@ import { View, AsyncStorage, StyleSheet, ActivityIndicator } from 'react-native'
 import { Provider as PaperProvider, BottomNavigation, Text } from 'react-native-paper';
 import Groceries from './components/Groceries';
 import Meals from './components/Meals';
+import ShoppingList from './components/ShoppingList';
 import SearchField from './components/SearchField';
 
 export default class App extends React.Component {
@@ -12,6 +13,7 @@ export default class App extends React.Component {
     index: 0,
     searchValue: "",
     routes: [
+      { key: 'shoppingList', title: 'Shopping List', icon: 'shopping-cart' },
       { key: 'meals', title: 'Meals', icon: 'restaurant' },
       { key: 'groceries', title: 'Groceries', icon: 'list' },
     ],
@@ -84,11 +86,15 @@ export default class App extends React.Component {
         search={this.state.searchValue}
       />;
 
+    const ShoppingListRoute = () =>
+      <ShoppingList />;
+
     const handleIndexChange = index => this.setState({ index });
 
     const renderScene = BottomNavigation.SceneMap({
       groceries: GroceriesRoute,
       meals: MealsRoute,
+      shoppingList: ShoppingListRoute,
     });
 
     if (!this.state.loading)

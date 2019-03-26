@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text } from 'react-native';
+import { View } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { Dialog, Paragraph, Portal, Button, TextInput, Chip } from 'react-native-paper';
 
@@ -34,16 +34,18 @@ export default class MealEdit extends React.Component {
                             value={this.state.nameText}
                             onChangeText={text => this.setState({ nameText: text })}
                         />
-                        {groceries.map(g =>
-                            <Chip
-                                key={g.name}
-                                style={styles.chip}
-                                selected={this.state.selectedGroceries.some(i => i.name === g.name)}
-                                onPress={() => handleAdd(g)}
-                            >
-                                {g.name}
-                            </Chip>
-                        )}
+                        <View style={styles.chipContainer}>
+                            {groceries.map(g =>
+                                <Chip
+                                    key={g.name}
+                                    style={styles.chip}
+                                    selected={this.state.selectedGroceries.some(i => i.name === g.name)}
+                                    onPress={() => handleAdd(g)}
+                                >
+                                    {g.name}
+                                </Chip>
+                            )}
+                        </View>
                     </>
                 );
 
@@ -80,6 +82,10 @@ export default class MealEdit extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    chipContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
     chip: {
         margin: 5,
         padding: 4,
