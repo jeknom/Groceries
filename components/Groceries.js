@@ -26,6 +26,7 @@ export default class Groceries extends React.Component {
     dataCopy.meals.forEach(m => {
       m.groceries = m.groceries.filter(g => g.name !== grocery.name)
     });
+
     this.props.onUpdate(dataCopy);
   }
 

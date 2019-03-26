@@ -11,8 +11,8 @@ export default class App extends React.Component {
     loading: true,
     index: 0,
     routes: [
-      { key: 'meals', title: 'Meals', icon: 'queue-music' },
-      { key: 'groceries', title: 'Groceries', icon: 'album' },
+      { key: 'meals', title: 'Meals', icon: 'restaurant' },
+      { key: 'groceries', title: 'Groceries', icon: 'list' },
     ],
     data: {}
   }
