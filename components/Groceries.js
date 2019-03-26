@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Button, Searchbar, Divider } from 'react-native-paper';
+import { Button, Divider } from 'react-native-paper';
 import Grocery from './Grocery';
 import GroceryEdit from './GroceryEdit';
 
 export default class Groceries extends React.Component {
   state = {
-    search: "",
     addVisible: false,
   }
 
@@ -31,8 +30,7 @@ export default class Groceries extends React.Component {
   }
 
   render() {
-    const { search } = this.state;
-    const { data } = this.props;
+    const { data, search } = this.props;
 
     const groceryItems = () => {
       if (data.groceries) {
@@ -50,30 +48,24 @@ export default class Groceries extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView>
-          <Searchbar
-            style={styles.searchbar}
-            placeholder="Search"
-            onChangeText={query => { this.setState({ search: query }); }}
-            value={search}
-          />
           <Divider />
           {groceryItems()}
-          <Button
-            style={styles.addButton}
-            icon="add"
-            mode="outlined"
-            onPress={() => this.setState({ addVisible: true })}
-          >
-            Add grocery
-          </Button>
-          <GroceryEdit
-            visible={this.state.addVisible}
-            onModify={this.handleUpdate}
-            onCancel={() => {
-              this.setState({ addVisible: false });
-            }}
-          />
         </ScrollView>
+        <Button
+          style={styles.addButton}
+          mode='contained'
+          icon="add"
+          onPress={() => this.setState({ addVisible: true })}
+        >
+          Add grocery
+        </Button>
+        <GroceryEdit
+          visible={this.state.addVisible}
+          onModify={this.handleUpdate}
+          onCancel={() => {
+            this.setState({ addVisible: false });
+          }}
+        />
       </View>
     );
   }
@@ -81,15 +73,9 @@ export default class Groceries extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginRight: 20,
-    marginLeft: 20,
-    marginTop: 15,
+    flex: 1,
+    padding: 10,
   },
-
-  searchbar: {
-    margin: 20,
-  },
-
   addButton: {
     margin: 20,
     padding: 10,

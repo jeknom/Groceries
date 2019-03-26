@@ -4,12 +4,13 @@ import { View, AsyncStorage, StyleSheet, ActivityIndicator } from 'react-native'
 import { Provider as PaperProvider, BottomNavigation, Text } from 'react-native-paper';
 import Groceries from './components/Groceries';
 import Meals from './components/Meals';
-import EraseData from './components/Debug/EraseData';
+import SearchField from './components/SearchField';
 
 export default class App extends React.Component {
   state = {
     loading: true,
     index: 0,
+    searchValue: "",
     routes: [
       { key: 'meals', title: 'Meals', icon: 'restaurant' },
       { key: 'groceries', title: 'Groceries', icon: 'list' },
@@ -47,6 +48,10 @@ export default class App extends React.Component {
       });
   }
 
+  handleSearchTextChange = text => {
+    this.setState({ searchValue: text });
+  }
+
   updateData = async data => {
     await AsyncStorage
       .setItem('DATA', JSON.stringify(data))
@@ -69,12 +74,14 @@ export default class App extends React.Component {
       <Groceries
         data={this.state.data}
         onUpdate={this.updateData}
+        search={this.state.searchValue}
       />;
 
     const MealsRoute = () =>
       <Meals
         data={this.state.data}
         onUpdate={this.updateData}
+        search={this.state.searchValue}
       />;
 
     const handleIndexChange = index => this.setState({ index });
@@ -87,11 +94,17 @@ export default class App extends React.Component {
     if (!this.state.loading)
       return (
         <PaperProvider>
-          <BottomNavigation
-            navigationState={this.state}
-            onIndexChange={handleIndexChange}
-            renderScene={renderScene}
-          />
+          <View style={styles.container}>
+            <SearchField
+              value={this.state.searchValue}
+              onChange={this.handleSearchTextChange}
+            />
+            <BottomNavigation
+              navigationState={this.state}
+              onIndexChange={handleIndexChange}
+              renderScene={renderScene}
+            />
+          </View>
         </PaperProvider>
       );
     else return (
@@ -110,8 +123,5 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
-    padding: 8,
   }
 });

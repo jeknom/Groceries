@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Searchbar, Button, Divider } from 'react-native-paper';
+import { Button, Divider } from 'react-native-paper';
 import Meal from './Meal';
 import MealEdit from './MealEdit';
 
 export default class Meals extends React.Component {
     state = {
-        search: "",
         addVisible: false,
     }
 
@@ -31,11 +30,11 @@ export default class Meals extends React.Component {
     }
 
     render() {
-        const { data } = this.props;
+        const { data, search } = this.props;
 
         const meals = () => {
             if (data.meals && data.meals.length > 0) {
-                const dataSearch = this.state.search === "" ? data.meals : data.meals.filter(m => m.name.toUpperCase().includes(this.state.search.toUpperCase()));
+                const dataSearch = search === "" ? data.meals : data.meals.filter(m => m.name.toUpperCase().includes(search.toUpperCase()));
 
                 return dataSearch.map(m =>
                     <Meal
@@ -51,29 +50,23 @@ export default class Meals extends React.Component {
         return (
             <View style={styles.container}>
                 <ScrollView>
-                    <Searchbar
-                        style={styles.searchbar}
-                        placeholder="Search meals..."
-                        onChangeText={query => { this.setState({ search: query }); }}
-                        value={this.state.search}
-                    />
                     <Divider />
                     {meals()}
-                    <Button
-                        style={styles.addButton}
-                        icon="add"
-                        mode="outlined"
-                        onPress={() => this.handleShow()}
-                    >
-                        Add Meal
-                    </Button>
-                    <MealEdit
-                        visible={this.state.addVisible}
-                        onModify={this.handleUpdate}
-                        onCancel={this.handleHide}
-                        groceries={this.props.data.groceries}
-                    />
                 </ScrollView>
+                <Button
+                    style={styles.addButton}
+                    mode='contained'
+                    icon="add"
+                    onPress={() => this.handleShow()}
+                >
+                    Add Meal
+                </Button>
+                <MealEdit
+                    visible={this.state.addVisible}
+                    onModify={this.handleUpdate}
+                    onCancel={this.handleHide}
+                    groceries={this.props.data.groceries}
+                />
             </View>
         );
     }
@@ -81,13 +74,9 @@ export default class Meals extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        margin: 20,
+        flex: 1,
+        padding: 10,
     },
-
-    searchbar: {
-        margin: 20,
-    },
-
     addButton: {
         marginRight: 20,
         marginLeft: 20,
