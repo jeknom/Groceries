@@ -1,9 +1,13 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { List, Title, Surface, Chip, Text } from 'react-native-paper';
+import { Surface } from 'react-native-paper';
+import MealSelecting from './MealSelecting';
+import Shopping from './Shopping';
+
 
 export default class ShoppingList extends React.Component {
     state = {
+        shoppingPhase: false,
         selectedMeals: []
     }
 
@@ -18,23 +22,22 @@ export default class ShoppingList extends React.Component {
         this.setState({ selectedMeals: dataCopy });
     }
 
+    toggleShopping = () => this.setState({ shoppingPhase: !this.state.shoppingPhase });
+
     render() {
-        const { meals } = this.props.data;
-        const mealChips = meals && meals.length > 0 ? meals.map(m =>
-            <Chip
-                key={m.name}
-                onPress={() => this.handleSelectModify(m)}
-                selected={this.state.selectedMeals.some(sm => sm.name === m.name)}
-            >
-                {m.name}
-            </Chip>
-        ) : <Text>Add some meals.</Text>
+
+        const currentPhase = this.state.shoppingPhase ? <Shopping selectedMeals={this.state.selectedMeals} /> :
+            <MealSelecting
+                meals={this.props.data.meals}
+                selectedMeals={this.state.selectedMeals}
+                onSelectModify={this.handleSelectModify}
+                onReady={this.toggleShopping}
+            />;
 
         return (
             <View style={styles.container}>
                 <Surface style={styles.surface}>
-                    <Title>Selected Meals</Title>
-                    {mealChips}
+                    {currentPhase}
                 </Surface>
             </View>
         );
