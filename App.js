@@ -87,7 +87,7 @@ export default class App extends React.Component {
       />;
 
     const ShoppingListRoute = () =>
-      <ShoppingList />;
+      <ShoppingList data={this.state.data} />;
 
     const handleIndexChange = index => this.setState({ index });
 
