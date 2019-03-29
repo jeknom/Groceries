@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "groceries",
-    "description": "No description",
+    "name": "Groceries",
+    "description": "A shopping list application.",
     "slug": "snack-SyneIVzdN",
     "privacy": "unlisted",
     "sdkVersion": "32.0.0",
@@ -22,7 +22,11 @@
       ]
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yeknom.groceries"
+    },
+    "android": {
+      "package": "com.yeknom.groceries"
     }
   }
 }
