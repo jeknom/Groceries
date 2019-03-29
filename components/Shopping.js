@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
-import { List, Checkbox } from 'react-native-paper';
+import { FlatList, StyleSheet } from 'react-native';
+import { Checklist } from './Checklist';
 
 export default class Shopping extends React.Component {
     state = {
@@ -19,23 +19,16 @@ export default class Shopping extends React.Component {
     }
 
     render() {
-        const checkBoxes = this.props.selectedMeals.map(m =>
-            m.map(g =>
-                <List.Item
-                    key={g.name}
-                    title={g.name}
-                    description={g.price}
-                    right={() =>
-                        <Checkbox
-                            status={this.state.pickups.some(gr => gr.name === g.name)}
-                            onPress={() => this.handlePickup(g)}
-                        />
-                    }
-                />)
+        const { selectedMeals } = this.props;
+        const shopList = () => selectedMeals.map(m =>
+            <Checklist
+                key={m.name}
+                groceries={m.groceries}
+                pickups={this.state.pickups}
+                onPickup={this.handlePickup}
+            />
         );
 
-        return (
-            { checkBoxes }
-        );
+        return shopList();
     }
 }

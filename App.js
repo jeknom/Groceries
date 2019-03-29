@@ -70,7 +70,7 @@ export default class App extends React.Component {
   }
 
   render() {
-    console.log(this.state.data)
+    // console.log(this.state.data)
 
     const GroceriesRoute = () =>
       <Groceries
