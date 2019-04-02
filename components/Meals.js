@@ -1,71 +1,41 @@
-import * as React from 'react';
+import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Button } from 'react-native-paper';
+import { Headline, Button } from 'react-native-paper';
+import DataService from '../services/Data';
 import Meal from './Meal';
-import MealEdit from './MealEdit';
 
-export default class Meals extends React.Component {
+class Meals extends React.Component {
     state = {
-        addVisible: false,
+        meals: [],
     }
 
-    handleShow = () => this.setState({ addVisible: true });
-    handleHide = () => this.setState({ addVisible: false });
+    componentDidMount = async () => {
+        const data = await DataService.getAll('MEALS');
+        if (data !== null) this.setState({ meals: data });
+    }
 
-    handleUpdate = meal => {
-        const dataCopy = { ...this.props.data };
+    handleDelete = async meal => {
+        await DataService.update('MEALS', [...this.state.meals].filter(m => m.name !== meal.name));
 
-        if (!meal.name || dataCopy.meals.some(m => m.name === meal.name))
-            return;
-
-        dataCopy.meals.push(meal);
-        this.props.onUpdate(dataCopy);
-    };
-
-    handleDelete = meal => {
-        console.log(meal);
-        const dataCopy = { ...this.props.data };
-        dataCopy.meals = dataCopy.meals.filter(m => m.name !== meal.name);
-        this.props.onUpdate(dataCopy);
+        const data = await DataService.getAll('MEALS');
+        if (data !== null) this.setState({ meals: data });
     }
 
     render() {
-        const { data, search } = this.props;
-
-        const meals = () => {
-            if (data.meals && data.meals.length > 0) {
-                const dataSearch = search === "" ? data.meals : data.meals.filter(m => m.name.toUpperCase().includes(search.toUpperCase()));
-
-                return dataSearch.map(m =>
-                    <Meal
-                        style={styles.meal}
-                        key={m.name}
-                        meal={m}
-                        onDelete={this.handleDelete}
-                    />
-                );
-            }
-        }
+        const { meals } = this.state;
+        const mealCards = meals.map(m => <ScrollView key={m.name}><Meal meal={m} onDelete={this.handleDelete} /></ScrollView>);
+        const content = meals.length > 0 ? mealCards : <Headline style={styles.headline}>We need a new meal..</Headline>;
 
         return (
             <View style={styles.container}>
-                <ScrollView>
-                    {meals()}
-                </ScrollView>
+                {content}
                 <Button
                     style={styles.addButton}
+                    icon='add'
                     mode='contained'
-                    icon="add"
-                    onPress={() => this.handleShow()}
                 >
-                    Add Meal
+                    New meal
                 </Button>
-                <MealEdit
-                    visible={this.state.addVisible}
-                    onModify={this.handleUpdate}
-                    onCancel={this.handleHide}
-                    groceries={this.props.data.groceries}
-                />
             </View>
         );
     }
@@ -73,12 +43,17 @@ export default class Meals extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        padding: 10,
+        marginTop: 40,
+        marginLeft: 10,
+        marginRight: 10,
+    },
+    headline: {
+        margin: 20,
     },
     addButton: {
-        marginRight: 20,
-        marginLeft: 20,
         padding: 10,
+        margin: 20,
     }
 });
+
+export default Meals;
