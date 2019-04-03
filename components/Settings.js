@@ -3,24 +3,25 @@ import { AsyncStorage, View, StyleSheet, Alert } from 'react-native';
 import { List } from 'react-native-paper';
 
 class Settings extends React.Component {
+    handleConfirmation = title => {
+        Alert.alert(
+            title,
+            'Are you sure you would like to continue?',
+            [
+                { text: 'Get me out of here', style: 'cancel' },
+                { text: 'I am sure', onPress: async () => await AsyncStorage.clear() }
+            ]
+        );
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <List.Item
-                    titleEllipsizeMode='middle'
                     title={'Erase data'}
                     description={'This will erase all saved data.'}
                     right={() => <List.Icon icon='delete' />}
-                    onPress={() => {
-                        Alert.alert(
-                            'You are about to delete all data',
-                            'Are you sure you would like to continue?',
-                            [
-                                { text: 'No way, Jose', style: 'cancel' },
-                                { text: 'I am sure', onPress: async () => await AsyncStorage.clear() }
-                            ]
-                        )
-                    }}
+                    onPress={() => this.handleConfirmation('All data will be erased!')}
                 />
             </View>
         );
