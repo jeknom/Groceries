@@ -5,9 +5,7 @@ import DataService from '../services/Data';
 import Meal from './Meal';
 
 export default class Meals extends React.Component {
-    state = {
-        meals: [],
-    }
+    state = { meals: [] }
 
     componentDidMount = async () => {
         const data = await DataService.getAll('MEALS');
