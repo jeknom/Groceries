@@ -4,7 +4,7 @@ import { Headline, Button } from 'react-native-paper';
 import DataService from '../services/Data';
 import Meal from './Meal';
 
-class Meals extends React.Component {
+export default class Meals extends React.Component {
     state = {
         meals: [],
     }
@@ -15,7 +15,7 @@ class Meals extends React.Component {
     }
 
     handleDelete = async meal => {
-        await DataService.update('MEALS', [...this.state.meals].filter(m => m.name !== meal.name));
+        await DataService.update('MEALS', this.state.meals.filter(m => m.name !== meal.name));
 
         const data = await DataService.getAll('MEALS');
         if (data !== null) this.setState({ meals: data });
@@ -24,11 +24,10 @@ class Meals extends React.Component {
     render() {
         const { meals } = this.state;
         const mealCards = meals.map(m => <ScrollView key={m.name}><Meal meal={m} onDelete={this.handleDelete} /></ScrollView>);
-        const content = meals.length > 0 ? mealCards : <Headline style={styles.headline}>We need a new meal..</Headline>;
 
         return (
             <View style={styles.container}>
-                {content}
+                {meals.length > 0 ? mealCards : <Headline style={styles.headline}>We need a new meal..</Headline>}
                 <Button
                     style={styles.addButton}
                     icon='add'
@@ -55,5 +54,3 @@ const styles = StyleSheet.create({
         margin: 20,
     }
 });
-
-export default Meals;
