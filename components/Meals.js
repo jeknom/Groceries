@@ -23,7 +23,7 @@ export default class Meals extends React.Component {
 
     render() {
         const { meals } = this.state;
-        const mealCards = meals.map(m => <ScrollView key={m.name}><Meal meal={m} onDelete={this.handleDelete} /></ScrollView>);
+        const mealCards = <ScrollView>{meals.map(m => <Meal key={m.name} meal={m} onDelete={this.handleDelete} />)}</ScrollView>;
 
         return (
             <View style={styles.container}>
