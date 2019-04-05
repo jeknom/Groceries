@@ -2,14 +2,15 @@ import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Headline, Button } from 'react-native-paper';
 import DataService from '../services/Data';
+import MealEdit from './MealEdit';
 import Meal from './Meal';
 
 export default class Meals extends React.Component {
-    state = { meals: [] }
+    state = { meals: [], editVisible: false }
 
     componentDidMount = async () => {
-        const data = await DataService.getAll('MEALS');
-        if (data !== null) this.setState({ meals: data });
+        const meals = await DataService.getAll('MEALS');
+        if (meals !== null) this.setState({ meals });
     }
 
     handleDelete = async meal => {
@@ -20,7 +21,7 @@ export default class Meals extends React.Component {
     }
 
     render() {
-        const { meals } = this.state;
+        const { meals, editVisible } = this.state;
         const mealCards = <ScrollView>{meals.map(m => <Meal key={m.name} meal={m} onDelete={this.handleDelete} />)}</ScrollView>;
 
         return (
@@ -30,9 +31,14 @@ export default class Meals extends React.Component {
                     style={styles.addButton}
                     icon='add'
                     mode='contained'
+                    onPress={() => this.setState({ editVisible: true })}
                 >
                     New meal
                 </Button>
+                <MealEdit
+                    visible={editVisible}
+                    onHide={() => this.setState({ editVisible: false })}
+                />
             </View>
         );
     }
