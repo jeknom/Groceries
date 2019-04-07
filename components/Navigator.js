@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { BottomNavigation, Text, Colors } from 'react-native-paper';
+import { BottomNavigation, Text, Snackbar } from 'react-native-paper';
 import Meals from './Meals';
 import Settings from './Settings';
 
-const MealsRoute = () => <Meals />;
+const MealsRoute = () => <Meals onNotification={this.handleNotification} />;
 const ShoppingRoute = () => <Text>Shopping</Text>;
 const SettingsRoute = () => <Settings />;
 
@@ -15,11 +15,18 @@ export default class MyComponent extends React.Component {
             { key: 'shopping', title: 'Shopping', icon: 'shopping-cart' },
             { key: 'settings', title: 'Settings', icon: 'settings' },
         ],
+        snackbarVisible: false,
+        notification: '',
     };
 
-    _handleIndexChange = index => this.setState({ index });
+    handleNotification = (message, delay) => {
+        this.setState({ notification: message, snackbarVisible: true })
+        setTimeout(() => this.setState({ snackbarVisible: false }), delay);
+    }
 
-    _renderScene = BottomNavigation.SceneMap({
+    handleIndexChange = index => this.setState({ index });
+
+    renderScene = BottomNavigation.SceneMap({
         meals: MealsRoute,
         shopping: ShoppingRoute,
         settings: SettingsRoute,
@@ -27,11 +34,19 @@ export default class MyComponent extends React.Component {
 
     render() {
         return (
-            <BottomNavigation
-                navigationState={this.state}
-                onIndexChange={this._handleIndexChange}
-                renderScene={this._renderScene}
-            />
+            <>
+                <BottomNavigation
+                    navigationState={this.state}
+                    onIndexChange={this.handleIndexChange}
+                    renderScene={this.renderScene}
+                />
+                <Snackbar
+                    visible={this.state.snackbarVisible}
+                    onDismiss={() => this.setState({ snackbarVisible: false })}
+                >
+                    {this.state.notification}
+                </Snackbar>
+            </>
         );
     }
 }

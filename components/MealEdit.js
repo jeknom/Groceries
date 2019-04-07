@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, View, TextInput, ScrollView, StyleSheet } from 'react-native';
-import { IconButton, List, TextInput as PaperInput } from 'react-native-paper';
+import { Button, IconButton, List, TextInput as PaperInput } from 'react-native-paper';
+import Counter from './Counter';
 import DataService from '../services/Data';
 
 export default class MealEdit extends React.Component {
@@ -8,6 +9,7 @@ export default class MealEdit extends React.Component {
         mealName: '',
         searchQuery: '',
         groceries: [],
+        selectedGroceries: [],
     };
 
     componentDidMount = async () => {
@@ -16,9 +18,34 @@ export default class MealEdit extends React.Component {
         else this.setState({ groceries: require('../assets/defaultData.json').groceries });
     }
 
+    handleIncrease = grocery => {
+        const dataCopy = [...this.state.selectedGroceries];
+        const index = dataCopy.findIndex(g => g.name === grocery.name);
+
+        if (index !== -1) dataCopy[index].quantity++;
+        else dataCopy.push({ ...grocery, quantity: 1 });
+
+        this.setState({ selectedGroceries: dataCopy });
+    }
+
+    handleDecrease = grocery => {
+        const dataCopy = [...this.state.selectedGroceries];
+        const index = dataCopy.findIndex(g => g.name === grocery.name);
+
+        if (dataCopy[index].quantity > 1) dataCopy[index].quantity--;
+        else dataCopy.splice(index);
+
+        this.setState({ selectedGroceries: dataCopy });
+    }
+
+    groceryQuantity = grocery => {
+        const value = this.state.selectedGroceries.find(g => g.name === grocery.name);
+        return value ? value.quantity : 0;
+    }
+
     render() {
-        const { visible, onHide } = this.props;
-        const { mealName, searchQuery, groceries } = this.state;
+        const { visible, onHide, onAdd } = this.props;
+        const { mealName, searchQuery, groceries, selectedGroceries } = this.state;
 
         const queriedGroceries = searchQuery === '' ? groceries : groceries.filter(g => g.name.toUpperCase().includes(searchQuery.toUpperCase()));
         const groceryItems =
@@ -28,6 +55,13 @@ export default class MealEdit extends React.Component {
                         key={g.name}
                         title={g.name}
                         description={`Costs ${g.price}€ | Found in area ${g.layout}`}
+                        right={() =>
+                            <Counter
+                                count={this.groceryQuantity(g)}
+                                onIncrease={() => this.handleIncrease(g)}
+                                onDecrease={() => this.handleDecrease(g)}
+                            />
+                        }
                     />
                 )}
             </ScrollView>;
@@ -61,6 +95,14 @@ export default class MealEdit extends React.Component {
                         onChangeText={searchQuery => this.setState({ searchQuery })}
                     />
                     {groceryItems}
+                    <Button
+                        style={styles.saveButton}
+                        icon='add'
+                        mode='contained'
+                        onPress={() => onAdd({ name: mealName, groceries: selectedGroceries })}
+                    >
+                        Save
+                    </Button>
                 </View>
             </Modal>
         );
@@ -82,5 +124,9 @@ const styles = StyleSheet.create({
     },
     searchBar: {
         margin: 10,
+    },
+    saveButton: {
+        padding: 10,
+        margin: 20,
     }
 });
