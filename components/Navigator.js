@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { BottomNavigation, Text, Snackbar } from 'react-native-paper';
+import { BottomNavigation, Text } from 'react-native-paper';
 import Meals from './Meals';
 import Settings from './Settings';
 
-const MealsRoute = () => <Meals onNotification={this.handleNotification} />;
+const MealsRoute = () => <Meals />;
 const ShoppingRoute = () => <Text>Shopping</Text>;
 const SettingsRoute = () => <Settings />;
 
@@ -19,11 +19,6 @@ export default class MyComponent extends React.Component {
         notification: '',
     };
 
-    handleNotification = (message, delay) => {
-        this.setState({ notification: message, snackbarVisible: true })
-        setTimeout(() => this.setState({ snackbarVisible: false }), delay);
-    }
-
     handleIndexChange = index => this.setState({ index });
 
     renderScene = BottomNavigation.SceneMap({
@@ -34,19 +29,11 @@ export default class MyComponent extends React.Component {
 
     render() {
         return (
-            <>
-                <BottomNavigation
-                    navigationState={this.state}
-                    onIndexChange={this.handleIndexChange}
-                    renderScene={this.renderScene}
-                />
-                <Snackbar
-                    visible={this.state.snackbarVisible}
-                    onDismiss={() => this.setState({ snackbarVisible: false })}
-                >
-                    {this.state.notification}
-                </Snackbar>
-            </>
+            <BottomNavigation
+                navigationState={this.state}
+                onIndexChange={this.handleIndexChange}
+                renderScene={this.renderScene}
+            />
         );
     }
 }

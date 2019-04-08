@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, View, TextInput, ScrollView, StyleSheet } from 'react-native';
-import { Button, IconButton, List, TextInput as PaperInput } from 'react-native-paper';
+import { Button, IconButton, List, TextInput as PaperInput, Snackbar } from 'react-native-paper';
 import Counter from './Counter';
 import DataService from '../services/Data';
 
@@ -10,6 +10,8 @@ export default class MealEdit extends React.Component {
         searchQuery: '',
         groceries: [],
         selectedGroceries: [],
+        snackbarVisible: false,
+        notification: '',
     };
 
     componentDidMount = async () => {
@@ -86,9 +88,9 @@ export default class MealEdit extends React.Component {
                         onChangeText={mealName => this.setState({ mealName })}
                     />
                 </View>
-                <View style={styles.grocery}>
+                <View style={{ flex: 1 }}>
                     <PaperInput
-                        style={styles.searchBar}
+                        style={{ margin: 10 }}
                         mode='outlined'
                         label='Search groceries..'
                         value={searchQuery}
@@ -104,6 +106,12 @@ export default class MealEdit extends React.Component {
                         Save
                     </Button>
                 </View>
+                <Snackbar
+                    visible={this.state.snackbarVisible}
+                    onDismiss={() => this.setState({ snackbarVisible: false })}
+                >
+                    {this.state.notification}
+                </Snackbar>
             </Modal>
         );
     }
@@ -114,16 +122,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         margin: 10,
     },
-    grocery: {
-        flex: 1,
-
-    },
     mealName: {
         marginLeft: 20,
         fontSize: 36,
-    },
-    searchBar: {
-        margin: 10,
     },
     saveButton: {
         padding: 10,
