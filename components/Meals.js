@@ -13,6 +13,8 @@ export default class Meals extends React.Component {
         if (meals !== null) this.setState({ meals });
     }
 
+    isExisting = name => this.state.meals.some(m => m.name === name);
+
     handleAdd = async meal => {
         const dataCopy = [...this.state.meals];
         if (!dataCopy.some(m => m.name === meal.name)) {
@@ -22,7 +24,6 @@ export default class Meals extends React.Component {
             const data = await DataService.getAll('MEALS');
             if (data !== null) this.setState({ meals: data, editVisible: false });
         }
-        else this.props.onNotification('A meal with that name already exists.', 3000);
     }
 
     handleDelete = async meal => {
@@ -60,7 +61,7 @@ export default class Meals extends React.Component {
                     visible={editVisible}
                     onHide={() => this.setState({ editVisible: false })}
                     onAdd={this.handleAdd}
-
+                    isExisting={this.isExisting}
                 />
             </View>
         );

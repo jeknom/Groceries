@@ -1,9 +1,9 @@
 {
-  "expoServerPort": null,
+  "expoServerPort": 19000,
   "devToolsPort": 19002,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "packagerPort": 19001,
+  "packagerPid": 2020,
+  "expoServerNgrokUrl": "https://yx-5at.jeknom.groceries.exp.direct",
+  "packagerNgrokUrl": "https://packager.yx-5at.jeknom.groceries.exp.direct",
+  "ngrokPid": 7252
 }
