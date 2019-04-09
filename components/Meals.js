@@ -6,12 +6,16 @@ import MealEdit from './MealEdit';
 import Meal from './Meal';
 
 export default class Meals extends React.Component {
-    state = { meals: [], editVisible: false }
+    state = {
+        meals: [],
+        editVisible: false,
+        targetMeal: null
+    };
 
     componentDidMount = async () => {
         const meals = await DataService.getAll('MEALS');
         if (meals !== null) this.setState({ meals });
-    }
+    };
 
     isExisting = name => this.state.meals.some(m => m.name === name);
 
@@ -24,17 +28,22 @@ export default class Meals extends React.Component {
             const data = await DataService.getAll('MEALS');
             if (data !== null) this.setState({ meals: data, editVisible: false });
         }
-    }
+    };
+
+    handleEdit = async (original, target) => {
+        console.log('this is an edit')
+    };
 
     handleDelete = async meal => {
         await DataService.update('MEALS', this.state.meals.filter(m => m.name !== meal.name));
 
         const data = await DataService.getAll('MEALS');
         if (data !== null) this.setState({ meals: data });
-    }
+    };
 
     render() {
-        const { meals, editVisible } = this.state;
+        const { meals, editVisible, targetMeal } = this.state;
+
         const mealCards =
             <ScrollView>
                 {meals.map(m =>
@@ -42,6 +51,7 @@ export default class Meals extends React.Component {
                         key={m.name}
                         meal={m}
                         onDelete={this.handleDelete}
+                        onEdit={() => this.setState({ targetMeal: m, editVisible: true })}
                     />
                 )}
             </ScrollView>;
@@ -53,7 +63,7 @@ export default class Meals extends React.Component {
                     style={styles.addButton}
                     icon='add'
                     mode='contained'
-                    onPress={() => this.setState({ editVisible: true })}
+                    onPress={() => this.setState({ targetMeal: null, editVisible: true })}
                 >
                     New meal
                 </Button>
@@ -61,7 +71,9 @@ export default class Meals extends React.Component {
                     visible={editVisible}
                     onHide={() => this.setState({ editVisible: false })}
                     onAdd={this.handleAdd}
+                    onEdit={this.handleEdit}
                     isExisting={this.isExisting}
+                    target={targetMeal}
                 />
             </View>
         );

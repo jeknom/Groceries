@@ -32,18 +32,18 @@ export default class MealEdit extends React.Component {
         this.setState({ groceries: dataCopy });
     }
 
-    handleSave = () => {
-        const meal = { name: this.state.mealName, groceries: this.state.groceries.filter(g => g.quantity > 0) };
-        if (!this.props.isExisting(meal)) this.props.onAdd(meal);
-        else this.setState({ notification: 'This meal already exists', snackbarVisible: true });
-        setTimeout(() => { this.setState({ snackbarVisible: false }) }, 3000);
-    }
-
     render() {
-        const { visible, onHide, isExisting } = this.props;
+        const { visible, onHide, onAdd, onEdit, isExisting, target } = this.props;
         const { mealName, searchQuery, groceries } = this.state;
+        const meal = { name: this.state.mealName, groceries: this.state.groceries.filter(g => g.quantity > 0) };
 
-        const queriedGroceries = searchQuery === '' ? groceries : groceries.filter(g => g.name.toUpperCase().includes(searchQuery.toUpperCase()));
+        const targetGroceries = target === null ? groceries : groceries.map(g => {
+            const match = target.groceries.find(m => m.name === g.name);
+            return match ? match : g;
+        });
+
+        const queriedGroceries = searchQuery === '' ? targetGroceries : targetGroceries.filter(g => g.name.toUpperCase().includes(searchQuery.toUpperCase()));
+
         const groceryItems =
             <ScrollView>
                 {queriedGroceries.map(g =>
@@ -89,10 +89,10 @@ export default class MealEdit extends React.Component {
                         style={styles.saveButton}
                         icon='add'
                         mode='contained'
-                        onPress={() => this.handleSave()}
-                        disabled={isExisting(mealName) || mealName === ''}
+                        onPress={target === null ? () => onAdd(meal) : () => onEdit(target.meal, meal)}
+                        disabled={(isExisting(mealName) && target === null) || mealName === ''}
                     >
-                        {isExisting(mealName) ? 'That name is taken' : 'Save'}
+                        {isExisting(mealName) && target === null ? 'That name is taken' : 'Save'}
                     </Button>
                 </View>
             </Modal>
