@@ -17,27 +17,27 @@
         },
         {
             "name": "Onion",
-            "price": 0.4,
-            "layout": 1
-        },
-        {
-            "name": "Garlic",
-            "price": 1,
-            "layout": 1
-        },
-        {
-            "name": "Mushrooms",
-            "price": 0.3,
-            "layout": 1
-        },
-        {
-            "name": "Salad",
             "price": 1.5,
             "layout": 1
         },
         {
+            "name": "Garlic",
+            "price": 1.5,
+            "layout": 1
+        },
+        {
+            "name": "Mushrooms",
+            "price": 2.5,
+            "layout": 1
+        },
+        {
+            "name": "Salad",
+            "price": 2,
+            "layout": 1
+        },
+        {
             "name": "Tomato",
-            "price": 0.4,
+            "price": 1.5,
             "layout": 1
         },
         {
