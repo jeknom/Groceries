@@ -3,7 +3,6 @@ import { ScrollView } from 'react-native';
 import { Card, Title, List, Paragraph, Button } from 'react-native-paper';
 
 export default MealCards = ({ meals, onEdit, onDelete }) => {
-    console.log(meals)
     const cards =
         <ScrollView>
             {meals.map(m =>
