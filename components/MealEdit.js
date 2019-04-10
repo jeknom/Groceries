@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, View, TextInput, ScrollView, StyleSheet } from 'react-native';
-import { Button, IconButton, TextInput as PaperInput } from 'react-native-paper';
-import Grocery from './Grocery';
+import { Button, IconButton, List, TextInput as PaperInput, Snackbar } from 'react-native-paper';
+import Counter from './Counter';
 import DataService from '../services/Data';
 
 export default class MealEdit extends React.Component {
@@ -9,56 +9,68 @@ export default class MealEdit extends React.Component {
         mealName: '',
         searchQuery: '',
         groceries: [],
+        selectedGroceries: [],
+        snackbarVisible: false,
+        notification: '',
     };
 
     componentDidMount = async () => {
-        let data = await DataService.getAll('GROCERIES');
-        if (data === null) data = require('../assets/defaultData.json').groceries;
-
-        this.setState({ groceries: data.map(g => { return { ...g, quantity: 0 } }) });
+        const groceries = await DataService.getAll('GROCERIES');
+        if (groceries !== null) this.setState({ groceries });
+        else this.setState({ groceries: require('../assets/defaultData.json').groceries });
     }
 
     handleIncrease = grocery => {
-        const dataCopy = [...this.state.groceries];
-        dataCopy.find(g => g.name === grocery.name).quantity++;
+        const dataCopy = [...this.state.selectedGroceries];
+        const index = dataCopy.findIndex(g => g.name === grocery.name);
 
-        this.setState({ groceries: dataCopy });
+        if (index !== -1) dataCopy[index].quantity++;
+        else dataCopy.push({ ...grocery, quantity: 1 });
+
+        this.setState({ selectedGroceries: dataCopy });
     }
 
     handleDecrease = grocery => {
-        const dataCopy = [...this.state.groceries];
-        dataCopy.find(g => g.name === grocery.name).quantity--;
+        const dataCopy = [...this.state.selectedGroceries];
+        const index = dataCopy.findIndex(g => g.name === grocery.name);
 
-        this.setState({ groceries: dataCopy });
+        if (dataCopy[index].quantity > 1) dataCopy[index].quantity--;
+        else dataCopy.splice(index);
+
+        this.setState({ selectedGroceries: dataCopy });
     }
 
-    handleSave = () => {
-        const meal = { name: this.state.mealName, groceries: this.state.groceries.filter(g => g.quantity > 0) };
-        if (!this.props.isExisting(meal)) this.props.onAdd(meal);
-        else this.setState({ notification: 'This meal already exists', snackbarVisible: true });
-        setTimeout(() => { this.setState({ snackbarVisible: false }) }, 3000);
+    groceryQuantity = grocery => {
+        const value = this.state.selectedGroceries.find(g => g.name === grocery.name);
+        return value ? value.quantity : 0;
     }
 
     render() {
-        const { visible, onHide, isExisting } = this.props;
-        const { mealName, searchQuery, groceries } = this.state;
+        const { visible, onHide, onAdd } = this.props;
+        const { mealName, searchQuery, groceries, selectedGroceries } = this.state;
 
         const queriedGroceries = searchQuery === '' ? groceries : groceries.filter(g => g.name.toUpperCase().includes(searchQuery.toUpperCase()));
         const groceryItems =
             <ScrollView>
                 {queriedGroceries.map(g =>
-                    <Grocery
+                    <List.Item
                         key={g.name}
-                        grocery={g}
-                        onIncrease={() => this.handleIncrease(g)}
-                        onDecrease={() => this.handleDecrease(g)}
+                        title={g.name}
+                        description={`Costs ${g.price}€ | Found in area ${g.layout}`}
+                        right={() =>
+                            <Counter
+                                count={this.groceryQuantity(g)}
+                                onIncrease={() => this.handleIncrease(g)}
+                                onDecrease={() => this.handleDecrease(g)}
+                            />
+                        }
                     />
                 )}
             </ScrollView>;
 
         return (
             <Modal
-                animationType='slide'
+                animationType='fade'
                 visible={visible}
                 onRequestClose={onHide}
             >
@@ -89,12 +101,17 @@ export default class MealEdit extends React.Component {
                         style={styles.saveButton}
                         icon='add'
                         mode='contained'
-                        onPress={() => this.handleSave()}
-                        disabled={isExisting(mealName) || mealName === ''}
+                        onPress={() => onAdd({ name: mealName, groceries: selectedGroceries })}
                     >
-                        {isExisting(mealName) ? 'That name is taken' : 'Save'}
+                        Save
                     </Button>
                 </View>
+                <Snackbar
+                    visible={this.state.snackbarVisible}
+                    onDismiss={() => this.setState({ snackbarVisible: false })}
+                >
+                    {this.state.notification}
+                </Snackbar>
             </Modal>
         );
     }
@@ -103,7 +120,7 @@ export default class MealEdit extends React.Component {
 const styles = StyleSheet.create({
     top: {
         flexDirection: 'row',
-        marginTop: 15,
+        margin: 10,
     },
     mealName: {
         marginLeft: 20,
