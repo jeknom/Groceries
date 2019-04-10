@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Headline, Button } from 'react-native-paper';
 import DataService from '../services/Data';
 import MealAdd from './MealAdd';
 import MealEdit from './MealEdit';
-import Meal from './Meal';
+import MealCards from './MealCards';
 
 export default class Meals extends React.Component {
     state = {
@@ -40,6 +40,8 @@ export default class Meals extends React.Component {
         if (data !== null) this.setState({ meals: data, editVisible: false });
     }
 
+    handleShowEdit = meal => this.setState({ currentEdit: meal, editVisible: true });
+
     handleDelete = async meal => {
         await DataService.update('MEALS', this.state.meals.filter(m => m.name !== meal.name));
 
@@ -50,21 +52,15 @@ export default class Meals extends React.Component {
     render() {
         const { meals, addVisible, editVisible, currentEdit } = this.state;
 
-        const mealCards =
-            <ScrollView>
-                {meals.map(m =>
-                    <Meal
-                        key={m.name}
-                        meal={m}
-                        onEdit={() => this.setState({ currentEdit: m, editVisible: true })}
-                        onDelete={this.handleDelete}
-                    />
-                )}
-            </ScrollView>;
-
         return (
             <View style={styles.container}>
-                {meals.length > 0 ? mealCards : <Headline style={{ margin: 20 }}>We need a new meal..</Headline>}
+                {meals.length > 0 ?
+                    <MealCards
+                        meals={meals}
+                        onEdit={this.handleShowEdit}
+                        onDelete={this.handleDelete}
+                    /> : <Headline style={{ margin: 20 }}>We need a new meal..</Headline>}
+
                 <Button
                     style={styles.addButton}
                     icon='add'
