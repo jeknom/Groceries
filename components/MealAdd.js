@@ -4,9 +4,9 @@ import { Button, IconButton } from 'react-native-paper';
 import Groceries from './Groceries';
 import DataService from '../services/Data';
 
-export default class MealEdit extends React.Component {
+export default class MealAdd extends React.Component {
     state = {
-        mealName: this.props.original.name,
+        mealName: '',
         searchQuery: '',
         groceries: [],
     };
@@ -15,10 +15,7 @@ export default class MealEdit extends React.Component {
         let groceries = await DataService.getAll('GROCERIES');
         if (groceries === null) groceries = require('../assets/defaultData.json').groceries;
 
-        const allGroceries = groceries.map(g => { return { ...g, quantity: 0 } });
-        const filtered = allGroceries.filter(g => !this.props.original.groceries.some(o => o.name === g.name));
-
-        this.setState({ groceries: this.props.original.groceries.concat(filtered) });
+        this.setState({ groceries: groceries.map(g => { return { ...g, quantity: 0 } }) });
     }
 
     handleIncrease = grocery => {
@@ -36,7 +33,7 @@ export default class MealEdit extends React.Component {
     }
 
     render() {
-        const { visible, onHide, onEdit, original } = this.props;
+        const { visible, onHide, onAdd } = this.props;
         const { mealName, groceries } = this.state;
 
         return (
@@ -69,9 +66,9 @@ export default class MealEdit extends React.Component {
                         style={styles.saveButton}
                         icon='add'
                         mode='contained'
-                        onPress={() => onEdit(original, { name: mealName, groceries: groceries.filter(g => g.quantity > 0) })}
+                        onPress={() => onAdd({ name: mealName, groceries: groceries.filter(g => g.quantity > 0) })}
                     >
-                        Edit
+                        Save
                     </Button>
                 </View>
             </Modal>
