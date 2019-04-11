@@ -4,9 +4,9 @@ import { Button, IconButton } from 'react-native-paper';
 import Groceries from './Groceries';
 import DataService from '../services/Data';
 
-export default class MealEdit extends React.Component {
+export default class MealModify extends React.Component {
     state = {
-        mealName: this.props.original.name,
+        mealName: this.props.original ? this.props.original.name : '',
         searchQuery: '',
         groceries: [],
     };
@@ -15,10 +15,14 @@ export default class MealEdit extends React.Component {
         let groceries = await DataService.getAll('GROCERIES');
         if (groceries === null) groceries = require('../assets/defaultData.json').groceries;
 
-        const allGroceries = groceries.map(g => { return { ...g, quantity: 0 } });
-        const filtered = allGroceries.filter(g => !this.props.original.groceries.some(o => o.name === g.name));
+        groceries = groceries.map(g => { return { ...g, quantity: 0 } });
 
-        this.setState({ groceries: this.props.original.groceries.concat(filtered) });
+        if (this.props.original !== null) {
+            filtered = groceries.filter(g => !this.props.original.groceries.some(o => o.name === g.name));
+            groceries = this.props.original.groceries.concat(filtered);
+        }
+
+        this.setState({ groceries });
     }
 
     handleIncrease = grocery => {
@@ -36,7 +40,7 @@ export default class MealEdit extends React.Component {
     }
 
     render() {
-        const { visible, onHide, onEdit, original } = this.props;
+        const { visible, onHide, onAdd, onEdit, original } = this.props;
         const { mealName, groceries } = this.state;
 
         return (
@@ -69,9 +73,13 @@ export default class MealEdit extends React.Component {
                         style={styles.saveButton}
                         icon='add'
                         mode='contained'
-                        onPress={() => onEdit(original, { name: mealName, groceries: groceries.filter(g => g.quantity > 0) })}
+                        onPress={original ?
+                            () => onEdit(original, { name: mealName, groceries: groceries.filter(g => g.quantity > 0) })
+                            : () => onAdd({ name: mealName, groceries: groceries.filter(g => g.quantity > 0) })
+                        }
+
                     >
-                        Edit
+                        Save
                     </Button>
                 </View>
             </Modal>

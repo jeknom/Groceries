@@ -2,15 +2,13 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Headline, Button } from 'react-native-paper';
 import DataService from '../services/Data';
-import MealAdd from './MealAdd';
-import MealEdit from './MealEdit';
+import MealModify from './MealModify';
 import MealCards from './MealCards';
 
 export default class Meals extends React.Component {
     state = {
         meals: [],
-        addVisible: false,
-        editVisible: false,
+        modifyVisible: false,
         currentEdit: null,
     }
 
@@ -20,13 +18,14 @@ export default class Meals extends React.Component {
     }
 
     handleAdd = async meal => {
+        console.log('here i am')
         const dataCopy = [...this.state.meals];
         if (!dataCopy.some(m => m.name === meal.name)) {
             dataCopy.push(meal);
             await DataService.update('MEALS', dataCopy);
 
             const data = await DataService.getAll('MEALS');
-            if (data !== null) this.setState({ meals: data, addVisible: false });
+            if (data !== null) this.setState({ meals: data, modifyVisible: false });
         }
     }
 
@@ -37,10 +36,10 @@ export default class Meals extends React.Component {
         await DataService.update('MEALS', dataCopy);
 
         const data = await DataService.getAll('MEALS');
-        if (data !== null) this.setState({ meals: data, editVisible: false });
+        if (data !== null) this.setState({ meals: data, modifyVisible: false });
     }
 
-    handleShowEdit = meal => this.setState({ currentEdit: meal, editVisible: true });
+    handleShowEdit = meal => this.setState({ currentEdit: meal, modifyVisible: true });
 
     handleDelete = async meal => {
         await DataService.update('MEALS', this.state.meals.filter(m => m.name !== meal.name));
@@ -50,7 +49,7 @@ export default class Meals extends React.Component {
     }
 
     render() {
-        const { meals, addVisible, editVisible, currentEdit } = this.state;
+        const { meals, modifyVisible, currentEdit } = this.state;
 
         return (
             <View style={styles.container}>
@@ -65,21 +64,15 @@ export default class Meals extends React.Component {
                     style={styles.addButton}
                     icon='add'
                     mode='contained'
-                    onPress={() => this.setState({ addVisible: true })}
+                    onPress={() => this.setState({ currentEdit: null, modifyVisible: true })}
                 >
                     New meal
                 </Button>
-                {addVisible ?
-                    <MealAdd
-                        visible={addVisible}
-                        onHide={() => this.setState({ addVisible: false })}
+                {modifyVisible ?
+                    <MealModify
+                        visible={modifyVisible}
+                        onHide={() => this.setState({ modifyVisible: false })}
                         onAdd={this.handleAdd}
-                    /> : null
-                }
-                {editVisible ?
-                    <MealEdit
-                        visible={editVisible}
-                        onHide={() => this.setState({ editVisible: false })}
                         onEdit={this.handleEdit}
                         original={currentEdit}
                     /> : null

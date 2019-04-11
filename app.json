@@ -27,6 +27,11 @@
     },
     "android": {
       "package": "com.yeknom.groceries"
-    }
+    },
+    "platforms": [
+      "android",
+      "ios"
+    ],
+    "githubUrl": "https://github.com/jeknom/Groceries"
   }
 }
