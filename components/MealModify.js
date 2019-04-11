@@ -73,6 +73,7 @@ export default class MealModify extends React.Component {
                         style={styles.saveButton}
                         icon='add'
                         mode='contained'
+                        disabled={mealName === ''}
                         onPress={original ?
                             () => onEdit(original, { name: mealName, groceries: groceries.filter(g => g.quantity > 0) })
                             : () => onAdd({ name: mealName, groceries: groceries.filter(g => g.quantity > 0) })
