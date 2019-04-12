@@ -1,10 +1,9 @@
 {
-  "devToolsPort": 19002,
   "expoServerPort": 19000,
+  "devToolsPort": 19002,
   "packagerPort": 19001,
-  "packagerPid": 1933,
+  "packagerPid": 7992,
   "expoServerNgrokUrl": "https://yx-5at.jeknom.groceries.exp.direct",
   "packagerNgrokUrl": "https://packager.yx-5at.jeknom.groceries.exp.direct",
-  "ngrokPid": 1961,
-  "webpackServerPort": null
+  "ngrokPid": 11036
 }

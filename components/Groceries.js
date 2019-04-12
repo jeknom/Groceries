@@ -1,83 +1,56 @@
-import * as React from 'react';
+import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Button, Divider } from 'react-native-paper';
-import Grocery from './Grocery';
-import GroceryEdit from './GroceryEdit';
+import { Text, List, IconButton, Colors, TextInput } from 'react-native-paper';
 
 export default class Groceries extends React.Component {
-  state = {
-    addVisible: false,
-  }
+    state = { query: '' }
 
-  handleUpdate = grocery => {
-    const dataCopy = { ...this.props.data };
-    if (dataCopy.groceries.some(g => g.name === grocery.name) ||
-      (grocery.name === "" || grocery.price === ""))
-      return;
+    render() {
+        const { query } = this.state;
+        const { groceries, onIncrease, onDecrease } = this.props;
+        const queriedGroceries = query === '' ? groceries : groceries.filter(g => g.name.toUpperCase().includes(query.toUpperCase()));
 
-    dataCopy.groceries.push(grocery);
-    this.props.onUpdate(dataCopy);
-  }
-
-  handleDelete = grocery => {
-    const dataCopy = { ...this.props.data };
-    dataCopy.groceries = dataCopy.groceries.filter(g => g.name !== grocery.name);
-    dataCopy.meals.forEach(m => {
-      m.groceries = m.groceries.filter(g => g.name !== grocery.name)
-    });
-
-    this.props.onUpdate(dataCopy);
-  }
-
-  render() {
-    const { data, search } = this.props;
-
-    const groceryItems = () => {
-      if (data.groceries) {
-        const dataSearch = search === "" ? data.groceries : data.groceries.filter(g => g.name.toUpperCase().includes(search.toUpperCase()));
-        return dataSearch.map(g =>
-          <Grocery
-            key={g.name}
-            item={g}
-            onDelete={this.handleDelete}
-          />
-        )
-      }
-    };
-
-    return (
-      <View style={styles.container}>
-        <ScrollView>
-          <Divider />
-          {groceryItems()}
-        </ScrollView>
-        <Button
-          style={styles.addButton}
-          mode='contained'
-          icon="add"
-          onPress={() => this.setState({ addVisible: true })}
-        >
-          Add grocery
-        </Button>
-        <GroceryEdit
-          visible={this.state.addVisible}
-          onModify={this.handleUpdate}
-          onCancel={() => {
-            this.setState({ addVisible: false });
-          }}
-        />
-      </View>
-    );
-  }
+        return (
+            <>
+                <TextInput
+                    style={{ margin: 10 }}
+                    mode='outlined'
+                    label='Search groceries..'
+                    value={query}
+                    onChangeText={query => this.setState({ query })}
+                />
+                <ScrollView>
+                    {queriedGroceries.map(g =>
+                        <List.Item
+                            key={g.name}
+                            title={g.name}
+                            description={`Costs ${g.price}€ | Total: ${g.price * g.quantity}€`}
+                            right={() =>
+                                <View style={styles.container}>
+                                    <IconButton
+                                        icon='remove'
+                                        onPress={() => onDecrease(g)}
+                                        disabled={g.quantity <= 0}
+                                        color={Colors.red800}
+                                    />
+                                    <Text style={{ margin: 14 }}>{g.quantity}</Text>
+                                    <IconButton
+                                        icon='add'
+                                        onPress={() => onIncrease(g)}
+                                        color={Colors.blue400}
+                                    />
+                                </View>
+                            }
+                        />
+                    )}
+                </ScrollView>
+            </>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-  },
-  addButton: {
-    margin: 20,
-    padding: 10,
-  }
+    container: {
+        flexDirection: 'row',
+    },
 });
