@@ -14,12 +14,13 @@ export default class Meals extends React.Component {
 
     componentDidMount = async () => {
         const meals = await DataService.getAll('MEALS');
+
         if (meals !== null) this.setState({ meals });
     }
 
     handleAdd = async meal => {
-        console.log('here i am')
         const dataCopy = [...this.state.meals];
+
         if (!dataCopy.some(m => m.name === meal.name)) {
             dataCopy.push(meal);
             await DataService.update('MEALS', dataCopy);
@@ -40,6 +41,8 @@ export default class Meals extends React.Component {
     }
 
     handleShowEdit = meal => this.setState({ currentEdit: meal, modifyVisible: true });
+
+    isExisting = name => this.state.meals.some(m => m.name === name);
 
     handleDelete = async meal => {
         await DataService.update('MEALS', this.state.meals.filter(m => m.name !== meal.name));
@@ -71,6 +74,7 @@ export default class Meals extends React.Component {
                 {modifyVisible ?
                     <MealModify
                         visible={modifyVisible}
+                        exists={this.isExisting}
                         onHide={() => this.setState({ modifyVisible: false })}
                         onAdd={this.handleAdd}
                         onEdit={this.handleEdit}
