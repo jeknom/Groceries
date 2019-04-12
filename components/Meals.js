@@ -42,7 +42,10 @@ export default class Meals extends React.Component {
 
     handleShowEdit = meal => this.setState({ currentEdit: meal, modifyVisible: true });
 
-    isExisting = name => this.state.meals.some(m => m.name === name);
+    isExisting = name => {
+        if (this.state.currentEdit) return this.state.currentEdit.name !== name;
+        else return this.state.meals.some(m => m.name === name);
+    }
 
     handleDelete = async meal => {
         await DataService.update('MEALS', this.state.meals.filter(m => m.name !== meal.name));

@@ -39,10 +39,13 @@ export default class MealModify extends React.Component {
         this.setState({ groceries: dataCopy });
     }
 
-    inputValidation = () => {
-        if (this.state.mealName === '') return 'The meal needs a name';
-        else if (!this.props.original && this.props.exists(this.state.mealName)) return 'That meal already exists';
-        else return 'Save';
+    buttonText = () => {
+        let text = 'Save';
+
+        if (this.state.mealName === '') text = 'Meal needs to have a name';
+        else if (this.props.exists(this.state.mealName)) text = 'Needs to be a unique name';
+
+        return text;
     }
 
     render() {
@@ -79,14 +82,14 @@ export default class MealModify extends React.Component {
                         style={styles.saveButton}
                         icon='add'
                         mode='contained'
-                        disabled={mealName === '' || (original ? false : exists(mealName))}
+                        disabled={mealName === '' || exists(mealName)}
                         onPress={original ?
                             () => onEdit(original, { name: mealName, groceries: groceries.filter(g => g.quantity > 0) })
                             : () => onAdd({ name: mealName, groceries: groceries.filter(g => g.quantity > 0) })
                         }
 
                     >
-                        {this.inputValidation()}
+                        {this.buttonText()}
                     </Button>
                 </View>
             </Modal>
