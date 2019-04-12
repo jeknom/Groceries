@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, List, IconButton, Colors, TextInput } from 'react-native-paper';
 
-export default class Groceries extends React.Component {
+export default class GroceryList extends React.Component {
     state = { query: '' }
 
     render() {

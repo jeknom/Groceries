@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, View, TextInput, StyleSheet } from 'react-native';
 import { Button, IconButton } from 'react-native-paper';
-import Groceries from './Groceries';
+import GroceryList from './GroceryList';
 import DataService from '../services/Data';
 
 export default class MealModify extends React.Component {
@@ -73,7 +73,7 @@ export default class MealModify extends React.Component {
                     />
                 </View>
                 <View style={{ flex: 1 }}>
-                    <Groceries
+                    <GroceryList
                         groceries={groceries}
                         onIncrease={this.handleIncrease}
                         onDecrease={this.handleDecrease}
