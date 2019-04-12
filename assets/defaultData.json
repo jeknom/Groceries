@@ -1,0 +1,54 @@
+{
+    "groceries": [
+        {
+            "name": "Spaghetti",
+            "price": 2,
+            "layout": 3
+        },
+        {
+            "name": "Bolognese sauce",
+            "price": 3,
+            "layout": 4
+        },
+        {
+            "name": "Minced meat",
+            "price": 4,
+            "layout": 2
+        },
+        {
+            "name": "Onion",
+            "price": 0.3,
+            "layout": 1
+        },
+        {
+            "name": "Garlic",
+            "price": 1,
+            "layout": 1
+        },
+        {
+            "name": "Mushrooms",
+            "price": 0.3,
+            "layout": 1
+        },
+        {
+            "name": "Salad",
+            "price": 2,
+            "layout": 1
+        },
+        {
+            "name": "Tomato",
+            "price": 0.4,
+            "layout": 1
+        },
+        {
+            "name": "Cottage cheese",
+            "price": 1.5,
+            "layout": 2
+        },
+        {
+            "name": "Chicken slices",
+            "price": 3,
+            "layout": 2
+        }
+    ]
+}
