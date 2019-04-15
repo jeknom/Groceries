@@ -1,12 +1,13 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, List, IconButton, Colors, TextInput } from 'react-native-paper';
+import GroceryModify from './GroceryModify';
 
 export default class GroceryList extends React.Component {
-    state = { query: '' }
+    state = { query: '', modifyVisible: false }
 
     render() {
-        const { query } = this.state;
+        const { query, modifyVisible } = this.state;
         const { groceries, onIncrease, onDecrease } = this.props;
         const queriedGroceries = query === '' ? groceries : groceries.filter(g => g.name.toUpperCase().includes(query.toUpperCase()));
 
@@ -18,6 +19,15 @@ export default class GroceryList extends React.Component {
                     label='Search groceries..'
                     value={query}
                     onChangeText={query => this.setState({ query })}
+                />
+                <IconButton
+                    size={40}
+                    icon='add'
+                    onPress={() => this.setState({ modifyVisible: true })}
+                />
+                <GroceryModify
+                    visible={modifyVisible}
+                    onDismiss={() => this.setState({ modifyVisible: false })}
                 />
                 <ScrollView>
                     {queriedGroceries.map(g =>
