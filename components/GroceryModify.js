@@ -1,30 +1,28 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Button, Paragraph, Dialog, Portal, Title } from 'react-native-paper';
+import { Button, List } from 'react-native-paper';
 
 export default class GroceryModify extends React.Component {
-    state = {}
+    state = { expanded: false }
     render() {
-
-        const { visible, onDismiss } = this.props;
-
         return (
-            <View>
-                <Portal>
-                    <Dialog
-                        visible={visible}
-                        onDismiss={onDismiss}
-                    >
-                        <Title>Hello</Title>
-                        <Dialog.Content>
-                            <Paragraph>This is simple dialog</Paragraph>
-                        </Dialog.Content>
-                        <Dialog.Actions>
-                            <Button onPress={onDismiss}>Done</Button>
-                        </Dialog.Actions>
-                    </Dialog>
-                </Portal>
-            </View>
+            <List.Accordion
+            title="New grocery"
+            left={() => <List.Icon icon="restaurant" />}
+            >
+                <List.Section
+                    style={{
+                        margin: 10,
+                        borderRadius: 4,
+                        borderWidth: 0.5,
+                        borderColor: '#d6d7da',
+                    }}
+                >
+                    <List.Item title="Name" />
+                    <List.Item title="Quantity" />
+                    <List.Item title="Price" />
+                    <List.Item title="Area" />
+                </List.Section>
+            </List.Accordion>
         );
     }
 }
