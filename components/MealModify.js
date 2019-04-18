@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, View, TextInput, StyleSheet } from 'react-native';
-import { Button, IconButton } from 'react-native-paper';
+import { Button, IconButton, Appbar } from 'react-native-paper';
 import GroceryList from './GroceryList';
 import DataService from '../services/Data';
 
@@ -58,21 +58,21 @@ export default class MealModify extends React.Component {
                 visible={visible}
                 onRequestClose={onHide}
             >
-                <View style={styles.top}>
-                    <IconButton
-                        size={40}
-                        icon='arrow-back'
+                <Appbar.Header statusBarHeight={0}>
+                    <Appbar.BackAction
                         onPress={() => onHide()}
                     />
+                    <Appbar.Content title='Create a new meal' />
+                    <Appbar.Action icon="add" />
+                </Appbar.Header>
+                <View style={{ flex: 1 }}>
                     <TextInput
                         style={styles.mealName}
-                        placeholder='Meal name'
+                        placeholder='Insert meal name here..'
                         mode='outlined'
                         value={mealName}
                         onChangeText={mealName => this.setState({ mealName })}
                     />
-                </View>
-                <View style={{ flex: 1 }}>
                     <GroceryList
                         groceries={groceries}
                         onIncrease={this.handleIncrease}
@@ -100,14 +100,15 @@ export default class MealModify extends React.Component {
 const styles = StyleSheet.create({
     top: {
         flexDirection: 'row',
-        margin: 10,
+        margin: 12,
     },
     mealName: {
-        marginLeft: 20,
-        fontSize: 36,
+        marginLeft: 12,
+        marginTop: 12,
+        fontSize: 24,
     },
     saveButton: {
-        padding: 10,
-        margin: 20,
+        padding: 12,
+        margin: 24,
     }
 });

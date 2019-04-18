@@ -20,39 +20,38 @@ export default class GroceryList extends React.Component {
                     value={query}
                     onChangeText={query => this.setState({ query })}
                 />
-                { query === '' ? 
-                    <GroceryModify
-                        expanded={this.state.modifyExpanded}
-                        onExpand={()=> this.setState({ modifyExpanded: !modifyExpanded })}
-                    /> : null
-                }
-                { !modifyExpanded ?
-                    <ScrollView>
-                        {queriedGroceries.map(g =>
-                            <List.Item
-                                key={g.name}
-                                title={g.name}
-                                description={`Costs ${g.price}€ | Total: ${g.price * g.quantity}€`}
-                                right={() =>
-                                    <View style={styles.container}>
-                                        <IconButton
-                                            icon='remove'
-                                            onPress={() => onDecrease(g)}
-                                            disabled={g.quantity <= 0}
-                                            color={Colors.red800}
-                                        />
-                                        <Text style={{ margin: 14 }}>{g.quantity}</Text>
-                                        <IconButton
-                                            icon='add'
-                                            onPress={() => onIncrease(g)}
-                                            color={Colors.blue400}
-                                        />
-                                    </View>
-                                }
-                            />
-                        )}
-                    </ScrollView> : null
-                }
+                {
+                    // The grocery modify needs to be refactored into the mealedit component.
+                    modifyExpanded ? 
+                        <GroceryModify
+                            expanded={this.state.modifyExpanded}
+                            onExpand={()=> this.setState({ modifyExpanded: !modifyExpanded })}
+                        /> : 
+                        <ScrollView>
+                            {queriedGroceries.map(g =>
+                                <List.Item
+                                    key={g.name}
+                                    title={g.name}
+                                    description={`Costs ${g.price}€ | Total: ${g.price * g.quantity}€`}
+                                    right={() =>
+                                        <View style={styles.container}>
+                                            <IconButton
+                                                icon='remove'
+                                                onPress={() => onDecrease(g)}
+                                                disabled={g.quantity <= 0}
+                                                color={Colors.red800}
+                                            />
+                                            <Text style={{ margin: 14 }}>{g.quantity}</Text>
+                                            <IconButton
+                                                icon='add'
+                                                onPress={() => onIncrease(g)}
+                                                color={Colors.blue400}
+                                            />
+                                        </View>
+                                    }
+                                />
+                            )}
+                        </ScrollView>}
             </>
         );
     }
@@ -62,4 +61,10 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
     },
+    bottom: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+      },
 });
