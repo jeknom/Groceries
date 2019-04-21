@@ -1,7 +1,8 @@
 import React from 'react';
 import { Modal, View, TextInput, StyleSheet } from 'react-native';
-import { Button, IconButton, Appbar } from 'react-native-paper';
+import { Button, Appbar } from 'react-native-paper';
 import GroceryList from './GroceryList';
+import GroceryModify from './GroceryModify';
 import DataService from '../services/Data';
 
 export default class MealModify extends React.Component {
@@ -9,6 +10,7 @@ export default class MealModify extends React.Component {
         mealName: this.props.original ? this.props.original.name : '',
         searchQuery: '',
         groceries: [],
+        groceryModifyVisible: false,
     };
 
     componentDidMount = async () => {
@@ -50,7 +52,7 @@ export default class MealModify extends React.Component {
 
     render() {
         const { visible, onHide, onAdd, onEdit, original, exists } = this.props;
-        const { mealName, groceries } = this.state;
+        const { mealName, groceries, groceryModifyVisible } = this.state;
 
         return (
             <Modal
@@ -63,34 +65,44 @@ export default class MealModify extends React.Component {
                         onPress={() => onHide()}
                     />
                     <Appbar.Content title='Create a new meal' />
-                    <Appbar.Action icon="add" />
+                    <Appbar.Action
+                        icon={ groceryModifyVisible ? 'close' : 'add' }
+                        onPress={() => this.setState({ groceryModifyVisible: !groceryModifyVisible })}
+                    />
                 </Appbar.Header>
                 <View style={{ flex: 1 }}>
-                    <TextInput
-                        style={styles.mealName}
-                        placeholder='Insert meal name here..'
-                        mode='outlined'
-                        value={mealName}
-                        onChangeText={mealName => this.setState({ mealName })}
-                    />
-                    <GroceryList
-                        groceries={groceries}
-                        onIncrease={this.handleIncrease}
-                        onDecrease={this.handleDecrease}
-                    />
-                    <Button
-                        style={styles.saveButton}
-                        icon='add'
-                        mode='contained'
-                        disabled={mealName === '' || exists(mealName)}
-                        onPress={original ?
-                            () => onEdit(original, { name: mealName, groceries: groceries.filter(g => g.quantity > 0) })
-                            : () => onAdd({ name: mealName, groceries: groceries.filter(g => g.quantity > 0) })
-                        }
-
-                    >
-                        {this.buttonText()}
-                    </Button>
+                    { groceryModifyVisible ? 
+                        <GroceryModify 
+                            onSave={() => {}}
+                        />
+                        :
+                        <>
+                            <TextInput
+                                style={styles.mealName}
+                                placeholder='Insert meal name here..'
+                                mode='outlined'
+                                value={mealName}
+                                onChangeText={mealName => this.setState({ mealName })}
+                            />
+                            <GroceryList
+                                groceries={groceries}
+                                onIncrease={this.handleIncrease}
+                                onDecrease={this.handleDecrease}
+                            />
+                            <Button
+                                style={styles.saveButton}
+                                icon='add'
+                                mode='contained'
+                                disabled={mealName === '' || exists(mealName)}
+                                onPress={original ?
+                                    () => onEdit(original, { name: mealName, groceries: groceries.filter(g => g.quantity > 0) })
+                                    : () => onAdd({ name: mealName, groceries: groceries.filter(g => g.quantity > 0) })
+                                }
+                            >
+                                {this.buttonText()}
+                            </Button>
+                        </>
+                    }
                 </View>
             </Modal>
         );
