@@ -11,7 +11,7 @@ export default class GroceryModify extends React.Component {
     }
 
     render() {
-        const { name, quantity, price, area } = this.state;
+        const { quantity, price, area } = this.state;
         const { onSave } = this.props;
 
         return (
@@ -21,7 +21,7 @@ export default class GroceryModify extends React.Component {
                     onChangeText={text => this.setState({ name: text })}
                     style={styles.textInput}
                 />
-                <Subheading style={styles.subheading}>Quantity: {this.state.quantity}</Subheading>
+                <Subheading style={styles.subheading}>Quantity: {quantity}</Subheading>
                 <Slider
                     style={styles.slider}
                     minimumValue={0}
@@ -29,7 +29,7 @@ export default class GroceryModify extends React.Component {
                     minimumTrackTintColor="#f45c42"
                     maximumTrackTintColor="#0062ff"
                     thumbTintColor="#151516"
-                    onValueChange={ value => this.setState({ quantity: Math.round(value) })}
+                    onValueChange={value => this.setState({ quantity: Math.round(value) })}
                 />
                 <Subheading style={styles.subheading}>Price: {`${this.state.price}€`}</Subheading>
                 <Slider
@@ -39,9 +39,9 @@ export default class GroceryModify extends React.Component {
                     minimumTrackTintColor="#f45c42"
                     maximumTrackTintColor="#0062ff"
                     thumbTintColor="#151516"
-                    onValueChange={ value => this.setState({ price: value < 10 ? Math.round( value * 10 ) / 10 : Math.round(price + 5) })}
+                    onValueChange={value => this.setState({ price: value < 10 ? Math.round(value * 10) / 10 : Math.round(price + 5) })}
                 />
-                <Subheading style={styles.subheading}>Area: {this.state.area}</Subheading>
+                <Subheading style={styles.subheading}>Area: {area}</Subheading>
                 <Slider
                     style={styles.slider}
                     minimumValue={1}
@@ -49,7 +49,7 @@ export default class GroceryModify extends React.Component {
                     minimumTrackTintColor="#f45c42"
                     maximumTrackTintColor="#0062ff"
                     thumbTintColor="#151516"
-                    onValueChange={ value => this.setState({ area: Math.round(value) })}
+                    onValueChange={value => this.setState({ area: Math.round(value) })}
                 />
                 <Button
                     mode='contained'

@@ -3,10 +3,10 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, List, IconButton, Colors, TextInput } from 'react-native-paper';
 
 export default class GroceryList extends React.Component {
-    state = { query: '', modifyExpanded: false }
+    state = { query: '' }
 
     render() {
-        const { query, modifyExpanded } = this.state;
+        const { query } = this.state;
         const { groceries, onIncrease, onDecrease } = this.props;
         const queriedGroceries = query === '' ? groceries : groceries.filter(g => g.name.toUpperCase().includes(query.toUpperCase()));
 
@@ -58,5 +58,5 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-      },
+    },
 });
