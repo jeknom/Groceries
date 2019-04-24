@@ -7,7 +7,7 @@ export default class GroceryList extends React.Component {
 
     render() {
         const { query } = this.state;
-        const { groceries, onIncrease, onDecrease } = this.props;
+        const { groceries, onIncrease, onDecrease, onDelete } = this.props;
         const queriedGroceries = query === '' ? groceries : groceries.filter(g => g.name.toUpperCase().includes(query.toUpperCase()));
 
         return (
@@ -26,7 +26,7 @@ export default class GroceryList extends React.Component {
                             title={g.name}
                             description={`Costs ${g.price}€ | Total: ${g.price * g.quantity}€`}
                             right={() =>
-                                <View style={styles.container}>
+                                <View style={styles.counter}>
                                     <IconButton
                                         icon='remove'
                                         onPress={() => onDecrease(g)}
@@ -41,6 +41,12 @@ export default class GroceryList extends React.Component {
                                     />
                                 </View>
                             }
+                            left={() =>
+                                <IconButton
+                                    icon='delete'
+                                    onPress={() => onDelete(g)}
+                                />
+                            }
                         />
                     )}
                 </ScrollView>
@@ -50,8 +56,11 @@ export default class GroceryList extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
+    counter: {
         flexDirection: 'row',
+        borderWidth: 1,
+        borderRadius: 5,
+        borderColor: '#d6d7da',
     },
     bottom: {
         position: 'absolute',

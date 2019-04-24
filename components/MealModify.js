@@ -32,12 +32,22 @@ export default class MealModify extends React.Component {
         if (groceries === null) groceries = require('../assets/defaultData.json').groceries;
 
         if (groceries.some(g => g.name !== grocery.name) && grocery.name !== '') {
-            console.log('here')
             groceries.push(grocery);
-            await DataService.update('GROCERIES', groceries)
-            groceries = groceries.map(g => { return { ...g, quantity: 0 } })
-            this.setState({ groceries, groceryModifyVisible: false });
+            await DataService.update('GROCERIES', groceries);
+
+            const stateGroceriesCopy = [...this.state.groceries];
+            stateGroceriesCopy.push({ ...grocery, quantity: 0 });
+            this.setState({ groceries: stateGroceriesCopy, groceryModifyVisible: false });
         }
+    }
+
+    handleDeleteGrocery = async grocery => {
+        let groceries = await DataService.getAll('GROCERIES');
+        if (groceries === null) groceries = require('../assets/defaultData.json').groceries;
+
+        groceries = groceries.filter(g => g.name !== grocery.name);
+        await DataService.update('GROCERIES', groceries);
+        this.setState({ groceries: [...this.state.groceries].filter(g => g.name !== grocery.name) })
     }
 
     handleIncrease = grocery => {
@@ -99,6 +109,7 @@ export default class MealModify extends React.Component {
                                 groceries={groceries}
                                 onIncrease={this.handleIncrease}
                                 onDecrease={this.handleDecrease}
+                                onDelete={this.handleDeleteGrocery}
                             />
                             <Button
                                 style={styles.saveButton}
