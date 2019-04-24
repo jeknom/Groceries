@@ -1,0 +1,2 @@
+BUGS
+- Can't modify existing meal name, the app says that it needs to be an unique name.
