@@ -24,7 +24,7 @@ export default class GroceryList extends React.Component {
                         <List.Item
                             key={g.name}
                             title={g.name}
-                            description={`Costs ${g.price}€ | Total: ${g.price * g.quantity}€`}
+                            description={`Costs ${g.price}€ | Total: ${Math.round(g.price * g.quantity * 10) / 10}€`}
                             right={() =>
                                 <View style={styles.counter}>
                                     <IconButton
@@ -58,9 +58,6 @@ export default class GroceryList extends React.Component {
 const styles = StyleSheet.create({
     counter: {
         flexDirection: 'row',
-        borderWidth: 1,
-        borderRadius: 5,
-        borderColor: '#d6d7da',
     },
     bottom: {
         position: 'absolute',

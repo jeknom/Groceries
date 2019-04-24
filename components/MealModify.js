@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, View, TextInput, StyleSheet } from 'react-native';
+import { Modal, View, TextInput, StyleSheet, Alert } from 'react-native';
 import { Button, Appbar } from 'react-native-paper';
 import GroceryList from './GroceryList';
 import GroceryModify from './GroceryModify';
@@ -30,14 +30,37 @@ export default class MealModify extends React.Component {
     handleNewGrocery = async grocery => {
         let groceries = await DataService.getAll('GROCERIES');
         if (groceries === null) groceries = require('../assets/defaultData.json').groceries;
+        const stateGroceriesCopy = [...this.state.groceries];
 
-        if (groceries.some(g => g.name !== grocery.name) && grocery.name !== '') {
+        if (!groceries.some(g => g.name.toUpperCase() === grocery.name.toUpperCase())) {
+            console.log('not update')
             groceries.push(grocery);
             await DataService.update('GROCERIES', groceries);
 
-            const stateGroceriesCopy = [...this.state.groceries];
             stateGroceriesCopy.push({ ...grocery, quantity: 0 });
             this.setState({ groceries: stateGroceriesCopy, groceryModifyVisible: false });
+        }
+        else if (grocery.name !== '') {
+            console.log('update')
+            Alert.alert(
+                'Duplicate name detected',
+                'A grocery with that name already exists, do you wish to update it?',
+                [
+                    { text: 'Cancel', style: 'cancel' },
+                    {
+                        text: 'Yes',
+                        onPress: async () => {
+                            let index = groceries.findIndex(i => i.name === grocery.name);
+                            groceries[index] = grocery;
+
+                            await DataService.update('GROCERIES', groceries);
+                            index = stateGroceriesCopy.findIndex(i => i.name === grocery.name);
+                            stateGroceriesCopy[index] = { ...grocery, quantity: 0 };
+                            this.setState({ groceries: stateGroceriesCopy, groceryModifyVisible: false });
+                        }
+                    }
+                ]
+            );
         }
     }
 

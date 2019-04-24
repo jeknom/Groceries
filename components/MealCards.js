@@ -13,7 +13,7 @@ export default MealCards = ({ meals, onEdit, onDelete }) => {
                             <List.Item
                                 key={g.name}
                                 title={g.name}
-                                description={`Quantity ${g.quantity} | Total ${g.price * g.quantity}€ | Area ${g.layout}`}
+                                description={`Quantity ${g.quantity} | Total ${Math.round(g.price * g.quantity * 10) / 10}€ | Area ${g.layout}`}
                             />) : <Paragraph>There are no groceries in this meal</Paragraph>}
                     </Card.Content>
                     <Card.Actions>
