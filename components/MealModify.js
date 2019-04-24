@@ -105,9 +105,12 @@ export default class MealModify extends React.Component {
                 onRequestClose={onHide}
             >
                 <Appbar.Header statusBarHeight={0}>
-                    <Appbar.BackAction
-                        onPress={() => onHide()}
-                    />
+                    {groceryModifyVisible ?
+                        null :
+                        <Appbar.BackAction
+                            onPress={() => onHide()}
+                        />
+                    }
                     <Appbar.Content title={groceryModifyVisible ? 'Create a new grocery' : 'Create a new meal'} />
                     <Appbar.Action
                         icon={groceryModifyVisible ? 'close' : 'add'}
