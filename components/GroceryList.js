@@ -11,7 +11,7 @@ export default class GroceryList extends React.Component {
         const queriedGroceries = query === '' ? groceries : groceries.filter(g => g.name.toUpperCase().includes(query.toUpperCase()));
 
         return (
-            <View>
+            <>
                 <TextInput
                     style={{ margin: 10 }}
                     mode='outlined'
@@ -44,7 +44,7 @@ export default class GroceryList extends React.Component {
                         />
                     )}
                 </ScrollView>
-            </View>
+            </>
         );
     }
 }

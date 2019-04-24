@@ -27,6 +27,19 @@ export default class MealModify extends React.Component {
         this.setState({ groceries });
     }
 
+    handleNewGrocery = async grocery => {
+        let groceries = await DataService.getAll('GROCERIES');
+        if (groceries === null) groceries = require('../assets/defaultData.json').groceries;
+
+        if (groceries.some(g => g.name !== grocery.name) && grocery.name !== '') {
+            console.log('here')
+            groceries.push(grocery);
+            await DataService.update('GROCERIES', groceries)
+            groceries = groceries.map(g => { return { ...g, quantity: 0 } })
+            this.setState({ groceries, groceryModifyVisible: false });
+        }
+    }
+
     handleIncrease = grocery => {
         const dataCopy = [...this.state.groceries];
         dataCopy.find(g => g.name === grocery.name).quantity++;
@@ -56,7 +69,7 @@ export default class MealModify extends React.Component {
 
         return (
             <Modal
-                animationType='fade'
+                animationType='slide'
                 visible={visible}
                 onRequestClose={onHide}
             >
@@ -64,17 +77,15 @@ export default class MealModify extends React.Component {
                     <Appbar.BackAction
                         onPress={() => onHide()}
                     />
-                    <Appbar.Content title='Create a new meal' />
+                    <Appbar.Content title={groceryModifyVisible ? 'Create a new grocery' : 'Create a new meal'} />
                     <Appbar.Action
-                        icon={ groceryModifyVisible ? 'close' : 'add' }
+                        icon={groceryModifyVisible ? 'close' : 'add'}
                         onPress={() => this.setState({ groceryModifyVisible: !groceryModifyVisible })}
                     />
                 </Appbar.Header>
                 <View style={{ flex: 1 }}>
-                    { groceryModifyVisible ? 
-                        <GroceryModify 
-                            onSave={() => {}}
-                        />
+                    {groceryModifyVisible ?
+                        <GroceryModify onSave={this.handleNewGrocery} />
                         :
                         <>
                             <TextInput

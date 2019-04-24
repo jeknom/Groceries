@@ -7,11 +7,11 @@ export default class GroceryModify extends React.Component {
         name: '',
         quantity: 0,
         price: 0,
-        area: 1,
+        layout: 1,
     }
 
     render() {
-        const { quantity, price, area } = this.state;
+        const { name, price, layout } = this.state;
         const { onSave } = this.props;
 
         return (
@@ -20,16 +20,6 @@ export default class GroceryModify extends React.Component {
                 <TextInput
                     onChangeText={text => this.setState({ name: text })}
                     style={styles.textInput}
-                />
-                <Subheading style={styles.subheading}>Quantity: {quantity}</Subheading>
-                <Slider
-                    style={styles.slider}
-                    minimumValue={0}
-                    maximumValue={20}
-                    minimumTrackTintColor="#f45c42"
-                    maximumTrackTintColor="#0062ff"
-                    thumbTintColor="#151516"
-                    onValueChange={value => this.setState({ quantity: Math.round(value) })}
                 />
                 <Subheading style={styles.subheading}>Price: {`${this.state.price}€`}</Subheading>
                 <Slider
@@ -41,7 +31,7 @@ export default class GroceryModify extends React.Component {
                     thumbTintColor="#151516"
                     onValueChange={value => this.setState({ price: value < 10 ? Math.round(value * 10) / 10 : Math.round(price + 5) })}
                 />
-                <Subheading style={styles.subheading}>Area: {area}</Subheading>
+                <Subheading style={styles.subheading}>Layout: {layout}</Subheading>
                 <Slider
                     style={styles.slider}
                     minimumValue={1}
@@ -49,11 +39,11 @@ export default class GroceryModify extends React.Component {
                     minimumTrackTintColor="#f45c42"
                     maximumTrackTintColor="#0062ff"
                     thumbTintColor="#151516"
-                    onValueChange={value => this.setState({ area: Math.round(value) })}
+                    onValueChange={value => this.setState({ layout: Math.round(value) })}
                 />
                 <Button
                     mode='contained'
-                    onPress={() => onSave()}
+                    onPress={() => onSave({ name, price, layout })}
                     style={styles.saveButton}
                 >
                     Save
