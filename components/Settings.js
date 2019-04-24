@@ -18,7 +18,7 @@ class Settings extends React.Component {
         return (
             <View style={styles.container}>
                 <List.Item
-                    title={'Erase data'}
+                    title={'Reset data'}
                     description={'This will erase all saved data.'}
                     right={() => <List.Icon icon='delete' />}
                     onPress={() => this.handleConfirmation('All data will be erased!')}

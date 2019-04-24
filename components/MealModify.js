@@ -33,7 +33,6 @@ export default class MealModify extends React.Component {
         const stateGroceriesCopy = [...this.state.groceries];
 
         if (!groceries.some(g => g.name.toUpperCase() === grocery.name.toUpperCase())) {
-            console.log('not update')
             groceries.push(grocery);
             await DataService.update('GROCERIES', groceries);
 
@@ -41,7 +40,6 @@ export default class MealModify extends React.Component {
             this.setState({ groceries: stateGroceriesCopy, groceryModifyVisible: false });
         }
         else if (grocery.name !== '') {
-            console.log('update')
             Alert.alert(
                 'Duplicate name detected',
                 'A grocery with that name already exists, do you wish to update it?',
