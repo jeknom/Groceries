@@ -45,6 +45,7 @@ export default class GroceryModify extends React.Component {
                     mode='contained'
                     onPress={() => onSave({ name, price, layout })}
                     style={styles.saveButton}
+                    disabled={name === ''}
                 >
                     Save
                 </Button>
