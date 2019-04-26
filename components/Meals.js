@@ -14,6 +14,7 @@ export default class Meals extends React.Component {
 
     componentDidMount = async () => {
         const meals = await DataService.getMeals();
+
         this.setState({ meals });
     }
 
@@ -53,7 +54,6 @@ export default class Meals extends React.Component {
 
     render() {
         const { meals, modifyVisible, currentEdit } = this.state;
-
         return (
             <View style={styles.container}>
                 {meals.length > 0 ?

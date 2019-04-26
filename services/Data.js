@@ -3,22 +3,34 @@ import { AsyncStorage } from 'react-native';
 const getMeals = async () => {
     try {
         const data = await AsyncStorage.getItem('MEALS');
-        const meals = data === null ? [] : data;
+        const meals = data === null ? [] : JSON.parse(data);
 
-        return JSON.parse(meals);
+        return meals;
     } catch (error) {
         alert('An error occurred while retrieving meals.');
+        console.log(error)
     }
 }
 
 const getGroceries = async () => {
     try {
         const data = await AsyncStorage.getItem('GROCERIES');
-        const groceries = data === null ? require('../assets/defaultData.json').groceries : data;
+        const groceries = data === null ? require('../assets/defaultData.json').groceries : JSON.parse(data);
 
-        return JSON.parse(groceries);
+        return groceries;
     } catch (error) {
         alert('An error occurred while retrieving groceries.');
+    }
+}
+
+const getShoppingList = async () => {
+    try {
+        const data = await AsyncStorage.getItem('SHOPPING_LIST');
+        const shoppingList = data === null ? [] : JSON.parse(data);
+
+        return shoppingList;
+    } catch (error) {
+        alert('An error occurred while retrieving the shopping list.');
     }
 }
 
@@ -40,4 +52,19 @@ const updateGroceries = async groceries => {
     }
 }
 
-export default { getMeals, getGroceries, updateMeals, updateGroceries };
+const updateShoppingList = async shoppingList => {
+    try {
+        await AsyncStorage.setItem('SHOPPING_LIST', JSON.stringify(shoppingList));
+    } catch (error) {
+        alert('An error occurred while updating the shopping list.');
+    }
+}
+
+export default {
+    getMeals,
+    getGroceries,
+    getShoppingList,
+    updateMeals,
+    updateGroceries,
+    updateShoppingList
+};
