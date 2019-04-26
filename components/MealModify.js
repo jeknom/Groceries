@@ -14,9 +14,7 @@ export default class MealModify extends React.Component {
     };
 
     componentDidMount = async () => {
-        let groceries = await DataService.getAll('GROCERIES');
-        if (groceries === null) groceries = require('../assets/defaultData.json').groceries;
-
+        let groceries = await DataService.getGroceries();
         groceries = groceries.map(g => { return { ...g, quantity: 0 } });
 
         if (this.props.original !== null) {
@@ -28,16 +26,13 @@ export default class MealModify extends React.Component {
     }
 
     handleNewGrocery = async grocery => {
-        let groceries = await DataService.getAll('GROCERIES');
-        if (groceries === null) groceries = require('../assets/defaultData.json').groceries;
-        const stateGroceriesCopy = [...this.state.groceries];
+        const groceries = [...this.state.groceries];
 
         if (!groceries.some(g => g.name.toUpperCase() === grocery.name.toUpperCase())) {
-            groceries.push(grocery);
-            await DataService.update('GROCERIES', groceries);
+            groceries.push({ ...grocery, quantity: 0 });
 
-            stateGroceriesCopy.push({ ...grocery, quantity: 0 });
-            this.setState({ groceries: stateGroceriesCopy, groceryModifyVisible: false });
+            await DataService.updateGroceries(groceries);
+            this.setState({ groceries, groceryModifyVisible: false });
         }
         else if (grocery.name !== '') {
             Alert.alert(
@@ -49,12 +44,10 @@ export default class MealModify extends React.Component {
                         text: 'Yes',
                         onPress: async () => {
                             let index = groceries.findIndex(i => i.name === grocery.name);
-                            groceries[index] = grocery;
+                            groceries[index] = { ...grocery, quantity: 0 };
 
-                            await DataService.update('GROCERIES', groceries);
-                            index = stateGroceriesCopy.findIndex(i => i.name === grocery.name);
-                            stateGroceriesCopy[index] = { ...grocery, quantity: 0 };
-                            this.setState({ groceries: stateGroceriesCopy, groceryModifyVisible: false });
+                            await DataService.updateGroceries(groceries);
+                            this.setState({ groceries, groceryModifyVisible: false });
                         }
                     }
                 ]
@@ -63,33 +56,31 @@ export default class MealModify extends React.Component {
     }
 
     handleDeleteGrocery = async grocery => {
-        let groceries = await DataService.getAll('GROCERIES');
-        if (groceries === null) groceries = require('../assets/defaultData.json').groceries;
+        const groceries = [...this.state.groceries].filter(g => g.name !== grocery.name);
 
-        groceries = groceries.filter(g => g.name !== grocery.name);
-        await DataService.update('GROCERIES', groceries);
-        this.setState({ groceries: [...this.state.groceries].filter(g => g.name !== grocery.name) })
+        await DataService.updateGroceries(groceries);
+        this.setState({ groceries });
     }
 
     handleIncrease = grocery => {
-        const dataCopy = [...this.state.groceries];
-        dataCopy.find(g => g.name === grocery.name).quantity++;
+        const groceries = [...this.state.groceries];
+        groceries.find(g => g.name === grocery.name).quantity++;
 
-        this.setState({ groceries: dataCopy });
+        this.setState({ groceries });
     }
 
     handleDecrease = grocery => {
-        const dataCopy = [...this.state.groceries];
-        dataCopy.find(g => g.name === grocery.name).quantity--;
+        const groceries = [...this.state.groceries];
+        groceries.find(g => g.name === grocery.name).quantity--;
 
-        this.setState({ groceries: dataCopy });
+        this.setState({ groceries });
     }
 
     buttonText = () => {
         let text = 'Save';
 
         if (this.state.mealName === '') text = 'Meal needs to have a name';
-        else if (this.props.exists(this.state.mealName)) text = 'Needs to be a unique name';
+        else if (this.props.exists(this.state.mealName) && !this.props.original) text = 'Needs to be a unique name';
 
         return text;
     }
@@ -139,7 +130,7 @@ export default class MealModify extends React.Component {
                                 style={styles.saveButton}
                                 icon='add'
                                 mode='contained'
-                                disabled={mealName === '' || exists(mealName)}
+                                disabled={mealName === '' || (original ? false : exists(mealName))}
                                 onPress={original ?
                                     () => onEdit(original, { name: mealName, groceries: groceries.filter(g => g.quantity > 0) })
                                     : () => onAdd({ name: mealName, groceries: groceries.filter(g => g.quantity > 0) })

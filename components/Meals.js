@@ -13,31 +13,35 @@ export default class Meals extends React.Component {
     }
 
     componentDidMount = async () => {
-        const meals = await DataService.getAll('MEALS');
-
-        if (meals !== null) this.setState({ meals });
+        const meals = await DataService.getMeals();
+        this.setState({ meals });
     }
 
     handleAdd = async meal => {
-        const dataCopy = [...this.state.meals];
+        const meals = [...this.state.meals];
 
-        if (!dataCopy.some(m => m.name === meal.name)) {
-            dataCopy.push(meal);
-            await DataService.update('MEALS', dataCopy);
+        if (!meals.some(m => m.name === meal.name)) {
+            meals.push(meal);
+            await DataService.updateMeals(meals);
 
-            const data = await DataService.getAll('MEALS');
-            if (data !== null) this.setState({ meals: data, modifyVisible: false });
+            this.setState({ meals, modifyVisible: false });
         }
     }
 
     handleEdit = async (original, target) => {
-        const dataCopy = [...this.state.meals];
-        const index = dataCopy.indexOf(original);
-        dataCopy[index] = target;
-        await DataService.update('MEALS', dataCopy);
+        const meals = [...this.state.meals];
+        const index = meals.indexOf(original);
+        meals[index] = target;
 
-        const data = await DataService.getAll('MEALS');
-        if (data !== null) this.setState({ meals: data, modifyVisible: false });
+        await DataService.updateMeals(meals);
+        this.setState({ meals, modifyVisible: false });
+    }
+
+    handleDelete = async meal => {
+        const meals = this.state.meals.filter(m => m.name !== meal.name);
+
+        await DataService.updateMeals(meals);
+        this.setState({ meals });
     }
 
     handleShowEdit = meal => this.setState({ currentEdit: meal, modifyVisible: true });
@@ -45,13 +49,6 @@ export default class Meals extends React.Component {
     isExisting = name => {
         if (this.state.currentEdit) return this.state.currentEdit.name !== name;
         else return this.state.meals.some(m => m.name === name);
-    }
-
-    handleDelete = async meal => {
-        await DataService.update('MEALS', this.state.meals.filter(m => m.name !== meal.name));
-
-        const data = await DataService.getAll('MEALS');
-        if (data !== null) this.setState({ meals: data });
     }
 
     render() {
