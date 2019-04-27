@@ -67,6 +67,7 @@ export default class Meals extends React.Component {
                     style={styles.addButton}
                     icon='add'
                     mode='contained'
+                    dark={true}
                     onPress={() => this.setState({ currentEdit: null, modifyVisible: true })}
                 >
                     New meal
@@ -94,6 +95,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     addButton: {
+        color: 'white',
         padding: 10,
         margin: 20,
     }

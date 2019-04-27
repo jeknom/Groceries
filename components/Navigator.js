@@ -1,80 +1,87 @@
 import * as React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text, Colors } from 'react-native-paper';
+import { Text, withTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Meals from './Meals';
 import ShoppingList from './ShoppingList';
 import Settings from './Settings';
 
-export default class MyComponent extends React.Component {
+class Navigator extends React.Component {
     state = {
         active: { name: 'meals', component: <Meals /> }
     };
 
     handleActiveChange = name => {
-        if (name === 'meals' && this.state.active.name !== 'meals') this.setState({ active: { name: 'meals', component: <Meals /> } });
-        else if (name === 'shopping' && this.state.active.name !== 'shopping') this.setState({ active: { name: 'shopping', component: <ShoppingList /> } });
-        else if (name === 'settings' && this.state.active.name !== 'settings') this.setState({ active: { name: 'settings', component: <Settings /> } });
+        if (name === 'meals' && this.state.active.name !== 'meals')
+            this.setState({ active: { name: 'meals', component: <Meals /> } });
+        else if (name === 'shopping' && this.state.active.name !== 'shopping')
+            this.setState({ active: { name: 'shopping', component: <ShoppingList /> } });
+        else if (name === 'settings' && this.state.active.name !== 'settings')
+            this.setState({ active: { name: 'settings', component: <Settings /> } });
     }
 
     render() {
+        const { colors } = this.props.theme;
         const { active } = this.state;
 
         return (
-            <View style={styles.container}>
-                <View style={styles.content}>
+            <View style={this.styles.container}>
+                <View style={this.styles.content}>
                     {active.component}
                 </View>
-                <View style={styles.navigation}>
+                <View style={this.styles.navigation}>
                     <TouchableOpacity
-                        style={styles.button}
+                        style={this.styles.navButton}
                         onPress={() => this.handleActiveChange('meals')}
                     >
-                        <Icon name="restaurant" size={26} color={active.name === 'meals' ? Colors.white : Colors.grey300} />
-                        <Text style={{ color: active.name === 'meals' ? Colors.white : Colors.grey300 }}>Meals</Text>
+                        <Icon name="restaurant" size={24} color={colors.accent} />
+                        { active.name === 'meals' ? <Text style={{ color: colors.accent }}>Meals</Text> : null }
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.button}
+                        style={this.styles.navButton}
                         onPress={() => this.handleActiveChange('shopping')}
                     >
-                        <Icon name="shopping-cart" size={26} color={active.name === 'meals' ? Colors.white : Colors.grey300} />
-                        <Text style={{ color: active.name === 'meals' ? Colors.white : Colors.grey300 }}>Shopping</Text>
+                        <Icon name="shopping-cart" size={24} color={colors.accent} />
+                        { active.name === 'shopping' ? <Text style={{ color: colors.accent}}>Shopping</Text> : null }
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.button}
+                        style={this.styles.navButton}
                         onPress={() => this.handleActiveChange('settings')}
                     >
-                        <Icon name="settings" size={26} color={active.name === 'meals' ? Colors.white : Colors.grey300} />
-                        <Text style={{ color: active.name === 'meals' ? Colors.white : Colors.grey300 }}>Settings</Text>
+                        <Icon name="settings" size={24} color={colors.accent} />
+                        { active.name === 'settings' ? <Text style={{ color: colors.accent }}>Settings</Text> : null}
                     </TouchableOpacity>
                 </View>
             </View>
         );
     }
+
+    styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            flexDirection: 'column'
+        },
+        content: {
+            flex: 1,
+        },
+        navigation: {
+            flex: 0.08,
+            flexDirection: 'row',
+            backgroundColor: this.props.theme.colors.primary,
+            marginTop: 5,
+            padding: 5,
+            justifyContent: 'center',
+            alignItems: 'center'
+        },
+        navButton: {
+            flex: 1,
+            flexDirection: 'column',
+            alignItems: 'center',
+            padding: 10,
+            marginRight: 20,
+            marginLeft: 20
+        },
+    });
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'column'
-    },
-    content: {
-        flex: 1,
-    },
-    navigation: {
-        flex: 0.08,
-        flexDirection: 'row',
-        backgroundColor: '#42a4f4',
-        marginTop: 5,
-        padding: 10,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    button: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: 10,
-        marginRight: 20,
-        marginLeft: 20
-    }
-});
+export default withTheme(Navigator);

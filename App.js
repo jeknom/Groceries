@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Font } from 'expo';
 import { ActivityIndicator, StyleSheet } from 'react-native';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
 import Navigator from './components/Navigator';
 
 export default class App extends React.Component {
@@ -16,7 +16,7 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <PaperProvider>
+      <PaperProvider theme={theme}>
         {this.state.fontLoading ?
           <ActivityIndicator
             style={styles.activityIndicator}
@@ -30,6 +30,16 @@ export default class App extends React.Component {
     );
   }
 }
+
+const theme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#06d62f',
+    accent: 'white',
+  }
+};
 
 const styles = StyleSheet.create({
   activityIndicator: {

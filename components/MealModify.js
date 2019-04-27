@@ -99,11 +99,16 @@ export default class MealModify extends React.Component {
                     {groceryModifyVisible ?
                         null :
                         <Appbar.BackAction
+                            color='white'
                             onPress={() => onHide()}
                         />
                     }
-                    <Appbar.Content title={groceryModifyVisible ? 'Create a new grocery' : 'Create a new meal'} />
+                    <Appbar.Content
+                        color='white'
+                        title={groceryModifyVisible ? 'Create a new grocery' : 'Create a new meal'}
+                    />
                     <Appbar.Action
+                        color='white'
                         icon={groceryModifyVisible ? 'close' : 'add'}
                         onPress={() => this.setState({ groceryModifyVisible: !groceryModifyVisible })}
                     />
@@ -130,6 +135,7 @@ export default class MealModify extends React.Component {
                                 style={styles.saveButton}
                                 icon='add'
                                 mode='contained'
+                                dark={true}
                                 disabled={mealName === '' || (original ? false : exists(mealName))}
                                 onPress={original ?
                                     () => onEdit(original, { name: mealName, groceries: groceries.filter(g => g.quantity > 0) })
