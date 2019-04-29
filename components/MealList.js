@@ -1,16 +1,46 @@
 import React from 'react';
-import { List } from 'react-native-paper';
+import { ScrollView } from 'react-native';
+import { TextInput, List, Checkbox, Divider, withTheme } from 'react-native-paper';
 
-export default class MealList extends React.Component {
+class MealList extends React.Component {
+    state = { query: '' }
+
     render() {
-        const { meals, selected, onSelect } = this.props;
+        const { meals, selected, onSelect, theme } = this.props;
+        const { query } = this.state;
 
-        const mealList = meals.map(m => <List.Item key={m.name} title={m.name} />);
+        const queriedMeals = query === '' ? meals : meals.filter(m => m.name.toUpperCase().includes(query.toUpperCase()));
+        const mealList = queriedMeals.map(m =>
+            <React.Fragment key={m.name}>
+                <List.Item
+                    title={m.name}
+                    right={() =>
+                        <Checkbox
+                            color={theme.colors.primary}
+                            status={selected.some(s => s.name === m.name) ? 'checked' : 'unchecked'}
+                        />
+                    }
+                    onPress={() => onSelect(m)}
+                />
+                <Divider />
+            </React.Fragment>
+        );
 
         return (
             <>
-                {mealList}
+                <TextInput
+                    style={{ margin: 10 }}
+                    mode='outlined'
+                    label='Search meals..'
+                    value={query}
+                    onChangeText={query => this.setState({ query })}
+                />
+                <ScrollView>
+                    {mealList}
+                </ScrollView>
             </>
         );
     }
 }
+
+export default withTheme(MealList);
