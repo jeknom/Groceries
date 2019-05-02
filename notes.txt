@@ -1,0 +1,15 @@
+Improvements
+- Swipe to change view.
+- Make the price slider less sensitive.
+- Add the possibilty to type in the price.
+- Make editing Groceries more intuitive.
+- Make the layout more intuitive by allowing creating own named layouts.
+- Some way to add extra items in shopping (shampoo, deodorant, etc..)
+
+BUGS
+- Adding new groceries to an existing meal does not add them to the shopping list
+ if the meal has already been selected.
+- Tabbing out while in MealModify and then tabbing back in does the slide animation.
+
+Feedback
+- Name popup when view is active is not nice. 1x
