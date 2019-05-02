@@ -3,7 +3,7 @@ import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, withTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Meals from './Meals';
-import ShoppingList from './ShoppingList';
+import Shopping from './Shopping';
 import Settings from './Settings';
 
 class Navigator extends React.Component {
@@ -15,7 +15,7 @@ class Navigator extends React.Component {
         if (name === 'meals' && this.state.active.name !== 'meals')
             this.setState({ active: { name: 'meals', component: <Meals /> } });
         else if (name === 'shopping' && this.state.active.name !== 'shopping')
-            this.setState({ active: { name: 'shopping', component: <ShoppingList /> } });
+            this.setState({ active: { name: 'shopping', component: <Shopping /> } });
         else if (name === 'settings' && this.state.active.name !== 'settings')
             this.setState({ active: { name: 'settings', component: <Settings /> } });
     }
@@ -35,21 +35,21 @@ class Navigator extends React.Component {
                         onPress={() => this.handleActiveChange('meals')}
                     >
                         <Icon name="restaurant" size={24} color={colors.accent} />
-                        { active.name === 'meals' ? <Text style={{ color: colors.accent }}>Meals</Text> : null }
+                        {active.name === 'meals' ? <Text style={{ color: colors.accent }}>Meals</Text> : null}
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={this.styles.navButton}
                         onPress={() => this.handleActiveChange('shopping')}
                     >
                         <Icon name="shopping-cart" size={24} color={colors.accent} />
-                        { active.name === 'shopping' ? <Text style={{ color: colors.accent}}>Shopping</Text> : null }
+                        {active.name === 'shopping' ? <Text style={{ color: colors.accent }}>Shopping</Text> : null}
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={this.styles.navButton}
                         onPress={() => this.handleActiveChange('settings')}
                     >
                         <Icon name="settings" size={24} color={colors.accent} />
-                        { active.name === 'settings' ? <Text style={{ color: colors.accent }}>Settings</Text> : null}
+                        {active.name === 'settings' ? <Text style={{ color: colors.accent }}>Settings</Text> : null}
                     </TouchableOpacity>
                 </View>
             </View>
