@@ -2,57 +2,73 @@ import * as React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { Text, withTheme } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import Meals from './Meals';
 import Shopping from './Shopping';
 import Settings from './Settings';
 
 class Navigator extends React.Component {
     state = {
-        active: { name: 'meals', component: <Meals /> }
+        index: 0,
     };
 
-    handleActiveChange = name => {
-        if (name === 'meals' && this.state.active.name !== 'meals')
-            this.setState({ active: { name: 'meals', component: <Meals /> } });
-        else if (name === 'shopping' && this.state.active.name !== 'shopping')
-            this.setState({ active: { name: 'shopping', component: <Shopping /> } });
-        else if (name === 'settings' && this.state.active.name !== 'settings')
-            this.setState({ active: { name: 'settings', component: <Settings /> } });
+    activeView = () => {
+        if (this.state.index === 0) return <Meals />;
+        else if (this.state.index === 1) return <Shopping />;
+        else if (this.state.index === 2) return <Settings />;
+    }
+
+    handleIndexChange = action => {
+        if (action === 'increment' && this.state.index < 2) this.setState({ index: this.state.index + 1 });
+        else if (action === 'decrement' && this.state.index > 0) this.setState({ index: this.state.index - 1 });
+        console.log(this.state.index)
     }
 
     render() {
         const { colors } = this.props.theme;
-        const { active } = this.state;
+        const { index } = this.state;
+
+        const config = {
+            velocityThreshold: 0.1,
+            directionalOffsetThreshold: 80
+        };
 
         return (
-            <View style={this.styles.container}>
-                <View style={this.styles.content}>
-                    {active.component}
+            <GestureRecognizer
+                onSwipeLeft={() => this.handleIndexChange('increment')}
+                onSwipeRight={() => this.handleIndexChange('decrement')}
+                config={config}
+                style={{ flex: 1, resizeMode: 'cover' }}
+            >
+                <View style={this.styles.container}>
+                    <View style={this.styles.content}>
+                        {this.activeView()}
+                    </View>
+                    <View style={this.styles.navigation}>
+                        <TouchableOpacity
+                            style={this.styles.navButton}
+                            onPress={() => this.setState({ index: 0 })}
+                        >
+                            <Icon name="restaurant" size={24} color={index === 0 ? colors.accent : '#a5fc99'} />
+                            <Text style={{ color: index === 0 ? colors.accent : '#a5fc99' }}>Meals</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={this.styles.navButton}
+                            onPress={() => this.setState({ index: 1 })}
+                        >
+                            <Icon name="shopping-cart" size={24} color={index === 1 ? colors.accent : '#a5fc99'} />
+                            <Text style={{ color: index === 1 ? colors.accent : '#a5fc99' }}>Shopping</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={this.styles.navButton}
+                            onPress={() => this.setState({ index: 2 })}
+                        >
+                            <Icon name="settings" size={24} color={index === 2 ? colors.accent : '#a5fc99'} />
+                            <Text style={{ color: index === 2 ? colors.accent : '#a5fc99' }}>Settings</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <View style={this.styles.navigation}>
-                    <TouchableOpacity
-                        style={this.styles.navButton}
-                        onPress={() => this.handleActiveChange('meals')}
-                    >
-                        <Icon name="restaurant" size={24} color={active.name === 'meals' ? colors.accent : '#a5fc99'} />
-                        <Text style={{ color: active.name === 'meals' ? colors.accent : '#a5fc99' }}>Meals</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={this.styles.navButton}
-                        onPress={() => this.handleActiveChange('shopping')}
-                    >
-                        <Icon name="shopping-cart" size={24} color={active.name === 'shopping' ? colors.accent : '#a5fc99'} />
-                        <Text style={{ color: active.name === 'shopping' ? colors.accent : '#a5fc99' }}>Shopping</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={this.styles.navButton}
-                        onPress={() => this.handleActiveChange('settings')}
-                    >
-                        <Icon name="settings" size={24} color={active.name === 'settings' ? colors.accent : '#a5fc99'} />
-                        <Text style={{ color: active.name === 'settings' ? colors.accent : '#a5fc99' }}>Settings</Text>
-                    </TouchableOpacity>
-                </View>
-            </View>
+            </GestureRecognizer>
         );
     }
 
