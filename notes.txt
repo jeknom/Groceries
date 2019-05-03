@@ -4,6 +4,7 @@ Improvements
 - Make editing Groceries more intuitive.
 - Make the layout more intuitive by allowing creating own named layouts.
 - Some way to add extra items in shopping (shampoo, deodorant, etc..)
+- Make the tabs load more smoothly, maybe an animation for that?
 
 BUGS
 - Adding new groceries to an existing meal does not add them to the shopping list

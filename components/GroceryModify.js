@@ -25,11 +25,11 @@ export default class GroceryModify extends React.Component {
                 <Slider
                     style={styles.slider}
                     minimumValue={0}
-                    maximumValue={15}
+                    maximumValue={8}
                     minimumTrackTintColor="#f45c42"
                     maximumTrackTintColor="#0062ff"
                     thumbTintColor="#151516"
-                    onValueChange={value => this.setState({ price: value < 10 ? Math.round(value * 10) / 10 : Math.round(price + 5) })}
+                    onValueChange={value => this.setState({ price: value < 6 ? Math.round(value * 10) / 10 : Math.round(price + 5) })}
                 />
                 <Subheading style={styles.subheading}>Layout: {layout}</Subheading>
                 <Slider
