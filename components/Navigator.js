@@ -28,8 +28,8 @@ class Navigator extends React.Component {
         const { colors } = this.props.theme;
         const { index } = this.state;
 
-        const config = {
-            velocityThreshold: 0.1,
+        const swipeConfig = {
+            velocityThreshold: 0.3,
             directionalOffsetThreshold: 80
         };
 
@@ -37,7 +37,7 @@ class Navigator extends React.Component {
             <GestureRecognizer
                 onSwipeLeft={() => this.handleIndexChange('increment')}
                 onSwipeRight={() => this.handleIndexChange('decrement')}
-                config={config}
+                config={swipeConfig}
                 style={{ flex: 1, resizeMode: 'cover' }}
             >
                 <View style={this.styles.container}>
