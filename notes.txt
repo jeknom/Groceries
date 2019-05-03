@@ -1,5 +1,4 @@
 Improvements
-- Swipe to change view.
 - Make the price slider less sensitive.
 - Add the possibilty to type in the price.
 - Make editing Groceries more intuitive.
@@ -12,4 +11,3 @@ BUGS
 - Tabbing out while in MealModify and then tabbing back in does the slide animation.
 
 Feedback
-- Name popup when view is active is not nice. 1x
