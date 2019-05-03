@@ -34,22 +34,22 @@ class Navigator extends React.Component {
                         style={this.styles.navButton}
                         onPress={() => this.handleActiveChange('meals')}
                     >
-                        <Icon name="restaurant" size={24} color={colors.accent} />
-                        {active.name === 'meals' ? <Text style={{ color: colors.accent }}>Meals</Text> : null}
+                        <Icon name="restaurant" size={24} color={active.name === 'meals' ? colors.accent : '#a5fc99'} />
+                        <Text style={{ color: active.name === 'meals' ? colors.accent : '#a5fc99' }}>Meals</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={this.styles.navButton}
                         onPress={() => this.handleActiveChange('shopping')}
                     >
-                        <Icon name="shopping-cart" size={24} color={colors.accent} />
-                        {active.name === 'shopping' ? <Text style={{ color: colors.accent }}>Shopping</Text> : null}
+                        <Icon name="shopping-cart" size={24} color={active.name === 'shopping' ? colors.accent : '#a5fc99'} />
+                        <Text style={{ color: active.name === 'shopping' ? colors.accent : '#a5fc99' }}>Shopping</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={this.styles.navButton}
                         onPress={() => this.handleActiveChange('settings')}
                     >
-                        <Icon name="settings" size={24} color={colors.accent} />
-                        {active.name === 'settings' ? <Text style={{ color: colors.accent }}>Settings</Text> : null}
+                        <Icon name="settings" size={24} color={active.name === 'settings' ? colors.accent : '#a5fc99'} />
+                        <Text style={{ color: active.name === 'settings' ? colors.accent : '#a5fc99' }}>Settings</Text>
                     </TouchableOpacity>
                 </View>
             </View>
