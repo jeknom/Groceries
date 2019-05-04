@@ -105,7 +105,7 @@ export default class MealModify extends React.Component {
                     }
                     <Appbar.Content
                         color='white'
-                        title={groceryModifyVisible ? 'Create a new grocery' : 'Create a new meal'}
+                        title={groceryModifyVisible ? 'Create a new grocery' : 'Add groceries'}
                     />
                     <Appbar.Action
                         color='white'
