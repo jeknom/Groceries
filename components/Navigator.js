@@ -10,6 +10,7 @@ import Settings from './Settings';
 class Navigator extends React.Component {
     state = {
         index: 0,
+        isTransitionAllowed: true
     };
 
     activeView = () => {
@@ -21,7 +22,6 @@ class Navigator extends React.Component {
     handleIndexChange = action => {
         if (action === 'increment' && this.state.index < 2) this.setState({ index: this.state.index + 1 });
         else if (action === 'decrement' && this.state.index > 0) this.setState({ index: this.state.index - 1 });
-        console.log(this.state.index)
     }
 
     render() {

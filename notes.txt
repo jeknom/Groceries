@@ -1,5 +1,4 @@
 Improvements
-- Make the price slider less sensitive.
 - Add the possibilty to type in the price.
 - Make editing Groceries more intuitive.
 - Make the layout more intuitive by allowing creating own named layouts.

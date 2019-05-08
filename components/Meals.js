@@ -12,11 +12,14 @@ export default class Meals extends React.Component {
         currentEdit: null,
     }
 
+    _isMounted = true;
+
     componentDidMount = async () => {
         const meals = await DataService.getMeals();
-
-        this.setState({ meals });
+        if (this._isMounted) this.setState({ meals });
     }
+
+    componentWillUnmount = () => this.isMounted = false;
 
     handleAdd = async meal => {
         const meals = [...this.state.meals];

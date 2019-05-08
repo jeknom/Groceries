@@ -12,21 +12,23 @@ export default class Shopping extends React.Component {
         shoppingList: []
     }
 
+    isMounted = true;
+
     componentDidMount = async () => {
+        this._isMounted = true;
+
         const meals = await DataService.getMeals();
-        const shoppingList = await DataService.getShoppingList();
-        this.setState({ meals, shoppingList });
+        if (this._isMounted) this.setState({ meals });
     }
+
+    componentWillUnmount = () => this.isMounted = false;
 
     handleSelect = async meal => {
         let shoppingList = [...this.state.shoppingList];
 
-        if (this.state.shoppingList.some(m => m.name === meal.name))
-            shoppingList = this.state.shoppingList.filter(m => m.name !== meal.name);
-        else
-            shoppingList.push(meal);
+        if (this.state.shoppingList.some(m => m.name === meal.name)) shoppingList = this.state.shoppingList.filter(m => m.name !== meal.name);
+        else shoppingList.push(meal);
 
-        await DataService.updateShoppingList(shoppingList);
         this.setState({ shoppingList });
     }
 
